@@ -16,18 +16,9 @@ class OpenAPIConfiguration {
     @Bean
     fun userAPIGroup(): GroupedOpenApi {
         return GroupedOpenApi.builder()
-            .group("user-api")
-            .pathsToMatch("/user-api/**")
-            .displayName("Account API Group")
-            .build()
-    }
-
-    @Bean
-    fun adminAPIGroup(): GroupedOpenApi {
-        return GroupedOpenApi.builder()
-            .group("admin-api")
-            .pathsToMatch("/admin-api/**")
-            .displayName("Admin API Group")
+            .group("daily-one-step-api")
+            .pathsToMatch("/**")
+            .displayName("API Group")
             .build()
     }
 
@@ -36,11 +27,9 @@ class OpenAPIConfiguration {
         return OpenAPI()
             .info(
                 Info()
-                    // front-end 에서 info 내 version이 명시되어야만 파싱이 가능하다고 하였습니다.
-                    // 현재 버전에서는 Info 버전(1.0.0)을 고정합니다.
                     .version("1.0.0")
-                    .description("신규 API Documentation")
-                    .title("READNUMBER😎")
+                    .description("API Documentation")
+                    .title("DAILY_ONE_STEP")
             )
             .components(
                 Components()
@@ -49,24 +38,15 @@ class OpenAPIConfiguration {
                         SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("Bearer").bearerFormat("JWT")
                             .`in`(SecurityScheme.In.HEADER).name("Authorization")
                     )
-                    .addSecuritySchemes(
-                        "User-Temp-Auth",
-                        SecurityScheme().type(SecurityScheme.Type.APIKEY)
-                            .`in`(SecurityScheme.In.HEADER).name("Authorization")
-                    )
             )
             .security(
                 listOf(
-                    SecurityRequirement().addList("BearerAuth"),
-                    SecurityRequirement().addList("User-Temp-Auth")
+                    SecurityRequirement().addList("BearerAuth")
                 )
             )
             .servers(
                 listOf(
                     Server().url("http://localhost").description("local"),
-                    Server().url("https://development-api.readnumber.tax").description("development"),
-                    Server().url("https://staging-api.readnumber.tax").description("staging")
-
                 )
             )
     }

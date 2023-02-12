@@ -4,7 +4,7 @@ import com.readnumber.dailyonestep.common.error.exception.ExpiredTokenException
 import com.readnumber.dailyonestep.common.error.exception.InternalServerException
 import com.readnumber.dailyonestep.common.error.exception.InvalidTokenException
 import com.readnumber.dailyonestep.security.common.Authority
-import com.readnumber.dailyonestep.security.principal.AdminPrincipal
+import com.readnumber.dailyonestep.security.principal.UserPrincipal
 import com.readnumber.dailyonestep.security.principal.Principal
 import io.jsonwebtoken.*
 import io.jsonwebtoken.security.Keys
@@ -76,10 +76,10 @@ abstract class BaseTokenProvider {
 
         val authorId = claimBody["authorId"]?.let { it.toString().toLong() } ?: -1
 
-        val principal = AdminPrincipal(
-            adminId = tokenId,
+        val principal = UserPrincipal(
+            userId = tokenId,
             authorId = authorId,
-            userName = "admin:$tokenId"
+            userName = "user:$tokenId"
         )
 
         return UsernamePasswordAuthenticationToken(
@@ -101,7 +101,7 @@ abstract class BaseTokenProvider {
     }
 
     private fun innerGetSimpleAuthorities(): List<GrantedAuthority> {
-        return AuthorityUtils.commaSeparatedStringToAuthorityList(Authority.ROLE_ADMIN)
+        return AuthorityUtils.commaSeparatedStringToAuthorityList(Authority.ROLE_USER)
     }
 
     private fun innerGetClaimBodyFromJwt(

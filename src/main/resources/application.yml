@@ -23,11 +23,15 @@ spring:
         database-platform: org.hibernate.dialect.MySQL8Dialect
         open-in-view: false
         show-sql: true
+    data:
+        redis:
+            port: 6379
+            url: "localhost"
 server:
     port: 80
 authentication:
     issuer: local-daily-one-step
-    admin:
+    user:
         access-token:
             secret-key: DAILY_ONE_STEP_ACCESS_SECRET_KEY@#$
             expired-seconds: 900

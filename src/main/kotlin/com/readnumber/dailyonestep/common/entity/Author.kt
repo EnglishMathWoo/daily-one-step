@@ -1,5 +1,6 @@
 package com.readnumber.dailyonestep.common.entity
 
+import com.readnumber.dailyonestep.user.User
 import jakarta.persistence.*
 import org.hibernate.annotations.Comment
 
@@ -19,7 +20,6 @@ class Author(
 ) {
 
     companion object {
-        fun adminAuthor(admin: Admin) = Author(authorType = AuthorTypeEnum.ADMIN, associatedId = admin.id!!)
-        fun userAuthor(user: TempUser) = Author(authorType = AuthorTypeEnum.USER, associatedId = user.id!!)
+        fun userAuthor(user: User) = Author(authorType = AuthorTypeEnum.USER, associatedId = user.id!!)
     }
 }

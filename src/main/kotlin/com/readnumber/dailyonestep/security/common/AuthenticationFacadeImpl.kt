@@ -17,15 +17,14 @@ class AuthenticationFacadeImpl : AuthenticationFacade {
         val authentication = getAuthenticationOrThrowEx()
         val principal = authentication.principal
 
-        // custom security filter 를 통해 들어오지 않았으나 익명 인증객체를 들고있는 경우
         if (isAnonymous(principal)) {
             return AnonymousPrincipal()
         }
-        // 정상적인 인증객체를 들고있는 경우 (USER, ADMIN, ANONYMOUS)
+
         if (principal is Principal) {
             return principal
         }
-        // 해당 exception 이 실행되면 약속된 Principal 객체가 아니었을때 실행됩니다.
+
         throw AccessDeniedException("허가되지 않은 접근 입니다.")
     }
 

@@ -2,7 +2,7 @@ version: '3'
 
 services:
   mysql:
-    platform: linux/amd64
+    platform: linux/arm64
     image: mysql:latest
     container_name: daily-db
     restart: always
@@ -10,7 +10,14 @@ services:
       - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: 1234
-      MYSQL_DATABASE: "DailyOneStep"
+      MYSQL_DATABASE: "readnumber"
       TZ: Asia/Seoul
     volumes:
       - "./mysql/conf.d:/etc/mysql/conf.d"
+  redis:
+    platform: linux/amd64
+    image: redis:7.0.5-alpine
+    container_name: daily-cache
+    restart: always
+    ports:
+      - 6379:6379

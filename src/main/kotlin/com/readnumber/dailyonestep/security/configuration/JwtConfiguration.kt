@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets
 @Configuration
 class JwtConfiguration {
 
-    @Value("\${authentication.admin.access-token.secret-key}")
+    @Value("\${authentication.user.access-token.secret-key}")
     private lateinit var tokenSecretKey: String
 
     @Bean

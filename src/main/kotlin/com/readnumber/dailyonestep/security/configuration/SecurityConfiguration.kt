@@ -1,15 +1,15 @@
 package com.readnumber.dailyonestep.security.configuration
 
-import com.readnumber.dailyonestep.common.token_provider.AdminAccessTokenProvider
-import com.readnumber.dailyonestep.common.token_provider.AdminRefreshTokenProvider
+import com.readnumber.dailyonestep.common.token_provider.UserAccessTokenProvider
+import com.readnumber.dailyonestep.common.token_provider.UserRefreshTokenProvider
 import com.readnumber.dailyonestep.security.common.Authority
 import com.readnumber.dailyonestep.security.common.DelegatedAccessDeniedHandler
 import com.readnumber.dailyonestep.security.common.DelegatedAuthenticationEntryPoint
 import com.readnumber.dailyonestep.security.crypto.SymmetricCrypto
-import com.readnumber.dailyonestep.security.filter.AdminAccessTokenFilter
-import com.readnumber.dailyonestep.security.filter.AdminRefreshTokenFilter
+import com.readnumber.dailyonestep.security.filter.UserAccessTokenFilter
+import com.readnumber.dailyonestep.security.filter.UserRefreshTokenFilter
 import com.readnumber.dailyonestep.security.filter.GlobalBaseExceptionFilter
-import com.readnumber.dailyonestep.security.handler.AdminAuthHandler
+import com.readnumber.dailyonestep.security.handler.UserAuthHandler
 import io.jsonwebtoken.JwtParser
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -30,35 +30,25 @@ class SecurityConfiguration {
     @Throws(Exception::class)
     fun filterChain(
         http: HttpSecurity,
-        adminAuthHandler: AdminAuthHandler,
-        // 클라 유형별로 토큰을 파싱하는 모듈
+        userAuthHandler: UserAuthHandler,
         symmetricCrypto: SymmetricCrypto,
         jwtParser: JwtParser,
-        // security exception handler (GlobalExceptionHandler 와 일괄 처리)
         accessDeniedHandler: DelegatedAccessDeniedHandler,
         authenticationEntryPoint: DelegatedAuthenticationEntryPoint,
-        // Temp
-        adminAccessTokenProvider: AdminAccessTokenProvider,
-        adminRefreshTokenProvider: AdminRefreshTokenProvider,
+        userAccessTokenProvider: UserAccessTokenProvider,
+        userRefreshTokenProvider: UserRefreshTokenProvider,
     ): SecurityFilterChain {
 
-        http
-            .authorizeHttpRequests()
-            .requestMatchers("/user-api/auth/**").permitAll()
-            .requestMatchers("/user-api/**").hasAnyRole(Authority.USER)
-            .requestMatchers("/admin-api/**").hasAnyRole(Authority.ADMIN)
-            .requestMatchers("/**").permitAll()
-            .and()
-            .addFilterBefore(
+        http.addFilterBefore(
                 GlobalBaseExceptionFilter(),
                 UsernamePasswordAuthenticationFilter::class.java
             )
             .addFilterBefore(
-                AdminAccessTokenFilter(adminAccessTokenProvider),
+                UserAccessTokenFilter(userAccessTokenProvider),
                 UsernamePasswordAuthenticationFilter::class.java
             )
             .addFilterBefore(
-                AdminRefreshTokenFilter(adminRefreshTokenProvider),
+                UserRefreshTokenFilter(userRefreshTokenProvider),
                 UsernamePasswordAuthenticationFilter::class.java
             )
             .exceptionHandling()

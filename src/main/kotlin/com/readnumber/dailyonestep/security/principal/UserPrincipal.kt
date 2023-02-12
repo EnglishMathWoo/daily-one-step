@@ -9,7 +9,6 @@ class UserPrincipal(
     override fun getId(): Long {
         return userId
     }
-
     override fun getAuthorId(): Long {
         return authorId
     }

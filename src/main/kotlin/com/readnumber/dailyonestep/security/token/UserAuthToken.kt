@@ -2,26 +2,31 @@ package com.readnumber.dailyonestep.security.token
 
 import mu.KotlinLogging
 import com.readnumber.dailyonestep.security.common.AuthToken
-import com.readnumber.dailyonestep.security.crypto.CryptoException
-import com.readnumber.dailyonestep.security.crypto.SymmetricCrypto
+import io.jsonwebtoken.*
 
 class UserAuthToken(
-    private val symmetricCrypto: SymmetricCrypto,
+    private val parser: JwtParser,
     private val token: String
-) : AuthToken<String> {
+) : AuthToken<Claims> {
 
     private val logger = KotlinLogging.logger {}
 
-    override fun getValue(): String {
-        return symmetricCrypto.decrypt(token)
+    override fun getValue(): Claims {
+        return parser.parseClaimsJws(token).body
     }
 
     override fun isValid(): Boolean {
         try {
-            symmetricCrypto.decrypt(token)
+            parser.parseClaimsJws(token)
             return true
-        } catch (e: CryptoException) {
-            logger.info("인증에러", e)
+        } catch (e: MalformedJwtException) {
+            logger.info("Invalid JWT signature trace: {}", e)
+        } catch (e: ExpiredJwtException) {
+            logger.info("Expired JWT token trace: {}", e)
+        } catch (e: UnsupportedJwtException) {
+            logger.info("Unsupported JWT token trace: {}", e)
+        } catch (e: IllegalArgumentException) {
+            logger.info("JWT token compact of handler are invalid trace: {}", e)
         }
         return false
     }
