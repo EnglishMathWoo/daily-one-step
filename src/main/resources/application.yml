@@ -1,0 +1,46 @@
+# NOTE: https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
+spring:
+    application:
+        name: daily-one-step
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: "jdbc:mysql://127.0.0.1:3306/readnumber?autoReconnect=true&useUnicode=true"
+        username: root
+        password: 1234
+        hikari:
+            auto-commit: false
+            connection-test-query: SELECT 1
+            minimum-idle: 10
+            maximum-pool-size: 50
+            transaction-isolation: TRANSACTION_READ_UNCOMMITTED
+            pool-name: pool-local-daily-one-step
+    jpa:
+        generate-ddl: true
+        hibernate:
+            ddl-auto: create-drop
+            naming:
+                implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+        database-platform: org.hibernate.dialect.MySQL8Dialect
+        open-in-view: false
+        show-sql: true
+server:
+    port: 80
+authentication:
+    issuer: local-daily-one-step
+    admin:
+        access-token:
+            secret-key: DAILY_ONE_STEP_ACCESS_SECRET_KEY@#$
+            expired-seconds: 900
+        refresh-token:
+            secret-key: DAILY_ONE_STEP_REFRESH_SECRET_KEY!@#
+            expired-seconds: 3600
+security:
+    crypto:
+        aes:
+            secret-key: DAILY_ONE_STEP_ACCESS_SECRET_KEY@#$
+springdoc:
+    swagger-ui:
+        path: /swagger-ui.html
+        display-request-duration: true
+        operations-sorter: method
+        disable-swagger-default-url: true
