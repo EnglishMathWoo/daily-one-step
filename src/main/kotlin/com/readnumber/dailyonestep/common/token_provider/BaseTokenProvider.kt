@@ -26,7 +26,6 @@ abstract class BaseTokenProvider {
         id: Long,
         audience: String,
         subject: String,
-        authorId: Long,
     ): String {
         try {
             val now = Date()
@@ -41,8 +40,6 @@ abstract class BaseTokenProvider {
                 .setIssuedAt(now)
                 .setIssuer(issuer)
                 .setAudience(audience)
-
-            claims["authorId"] = authorId
 
             return Jwts.builder()
                 .setClaims(claims)
@@ -74,11 +71,8 @@ abstract class BaseTokenProvider {
             throw InvalidTokenException("토큰 audience 정보가 올바르지 않습니다.")
         }
 
-        val authorId = claimBody["authorId"]?.let { it.toString().toLong() } ?: -1
-
         val principal = UserPrincipal(
             userId = tokenId,
-            authorId = authorId,
             userName = "user:$tokenId"
         )
 

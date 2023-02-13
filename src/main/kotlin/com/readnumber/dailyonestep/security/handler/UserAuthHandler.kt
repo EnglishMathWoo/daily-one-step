@@ -17,11 +17,9 @@ class UserAuthHandler : AuthHandler<UserAuthToken> {
         if (authToken.isValid()) {
             val claims = authToken.getValue()
             val id = claims.id.toLong()
-            val authorId = claims["authorId"].toString().toLong()
 
             val principal = UserPrincipal(
                 userId = id,
-                authorId = authorId,
                 userName = "user:$id"
             )
             val authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(Authority.ROLE_USER)

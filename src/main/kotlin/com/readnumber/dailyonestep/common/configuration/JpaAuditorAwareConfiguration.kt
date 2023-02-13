@@ -12,6 +12,6 @@ class JpaAuditorAwareConfiguration(
     private val authenticationFacade: AuthenticationFacade
 ) : AuditorAware<Long> {
     override fun getCurrentAuditor(): Optional<Long> {
-        return Optional.ofNullable(authenticationFacade.getPrincipal().getAuthorId())
+        return Optional.ofNullable(authenticationFacade.getPrincipal().getId())
     }
 }

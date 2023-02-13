@@ -1,4 +1,4 @@
-package com.readnumber.dailyonestep.authentication
+package com.readnumber.dailyonestep.user
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.redis.core.RedisTemplate

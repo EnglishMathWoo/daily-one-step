@@ -1,4 +1,4 @@
-package com.readnumber.dailyonestep.authentication
+package com.readnumber.dailyonestep.user
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash

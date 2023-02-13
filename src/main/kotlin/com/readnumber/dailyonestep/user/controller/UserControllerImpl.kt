@@ -1,9 +1,8 @@
 package com.readnumber.dailyonestep.user.controller
 
+import com.readnumber.dailyonestep.common.binding_annotation.ValidJwtHeader
 import com.readnumber.dailyonestep.common.binding_annotation.ValidUserIdFromAccessToken
-import com.readnumber.dailyonestep.user.dto.request.UserChangePasswordDto
-import com.readnumber.dailyonestep.user.dto.request.UserModifyDto
-import com.readnumber.dailyonestep.user.dto.request.UserSignUpDto
+import com.readnumber.dailyonestep.user.dto.request.*
 import com.readnumber.dailyonestep.user.dto.response.UserWrapperDto
 import com.readnumber.dailyonestep.user.service.UserService
 import jakarta.validation.Valid
@@ -53,5 +52,34 @@ class UserControllerImpl(
     ): UserWrapperDto {
         val user = userService.getOne(userId)
         return UserWrapperDto.from(user)
+    }
+
+    @PostMapping("/sign-in")
+    override fun signIn(
+        @RequestBody
+        dto: UserSignInRequestDto
+    ): Any {
+        return userService.signIn(dto)
+    }
+
+    @PostMapping("/access-tokens/refresh")
+    override fun refreshAccessToken(
+        @ValidJwtHeader
+        refreshToken: String,
+        @RequestBody
+        dto: AccessTokenRefreshRequestDto
+    ): Any {
+        return mapOf(
+            "accessToken" to userService.refreshAccessToken(refreshToken = refreshToken, dto.accessToken)
+        )
+    }
+
+    @PostMapping("/sign-out")
+    override fun signOut(
+        @ValidJwtHeader
+        refreshToken: String
+    ): Any {
+        userService.releaseRefreshToken(refreshToken)
+        return true
     }
 }

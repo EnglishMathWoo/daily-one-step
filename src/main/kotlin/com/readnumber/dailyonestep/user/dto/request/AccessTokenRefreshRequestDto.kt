@@ -1,4 +1,4 @@
-package com.readnumber.dailyonestep.authentication.dto
+package com.readnumber.dailyonestep.user.dto.request
 
 data class AccessTokenRefreshRequestDto(
     val accessToken: String,

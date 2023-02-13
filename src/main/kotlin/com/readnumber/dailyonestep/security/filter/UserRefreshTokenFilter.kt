@@ -6,12 +6,20 @@ import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher
+import org.springframework.security.web.util.matcher.NegatedRequestMatcher
+import org.springframework.security.web.util.matcher.OrRequestMatcher
 import org.springframework.web.filter.OncePerRequestFilter
 import java.io.IOException
 
 class UserRefreshTokenFilter(
     private val tokenProvider: UserRefreshTokenProvider
 ) : OncePerRequestFilter() {
+
+    private val matchers = arrayOf(
+        AntPathRequestMatcher("/users/access-tokens/refresh"),
+        AntPathRequestMatcher("/users/sign-out")
+    )
 
     private fun getJwtFromHeader(request: HttpServletRequest): String? {
         val authorization = request.getHeader("Authorization")
@@ -35,5 +43,9 @@ class UserRefreshTokenFilter(
         }
 
         filterChain.doFilter(request, response)
+    }
+
+    override fun shouldNotFilter(request: HttpServletRequest): Boolean {
+        return NegatedRequestMatcher(OrRequestMatcher(*matchers)).matches(request)
     }
 }

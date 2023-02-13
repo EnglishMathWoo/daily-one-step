@@ -22,4 +22,17 @@ interface UserController {
         userId: Long,
         dto: UserChangePasswordDto
     ): UserWrapperDto
+
+    fun signIn(
+        dto: UserSignInRequestDto
+    ): Any
+
+    fun refreshAccessToken(
+        refreshToken: String,
+        dto: AccessTokenRefreshRequestDto
+    ): Any
+
+    fun signOut(
+        refreshToken: String
+    ): Any
 }
