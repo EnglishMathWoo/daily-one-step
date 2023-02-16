@@ -1,6 +1,6 @@
 package com.readnumber.dailyonestep.common.global
 
-import com.readnumber.dailyonestep.common.dto.base.ErrorResponseBody
+import com.readnumber.dailyonestep.common.dto.ErrorResponseBody
 import com.readnumber.dailyonestep.common.error.exception.*
 import mu.KotlinLogging
 import org.springframework.http.ResponseEntity

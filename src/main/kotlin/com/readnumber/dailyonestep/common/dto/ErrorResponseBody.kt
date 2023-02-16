@@ -1,4 +1,4 @@
-package com.readnumber.dailyonestep.common.dto.base
+package com.readnumber.dailyonestep.common.dto
 
 import com.readnumber.dailyonestep.common.error.exception.BaseException
 

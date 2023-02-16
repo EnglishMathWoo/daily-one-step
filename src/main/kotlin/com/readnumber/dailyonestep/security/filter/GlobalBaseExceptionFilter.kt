@@ -1,7 +1,7 @@
 package com.readnumber.dailyonestep.security.filter
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.readnumber.dailyonestep.common.dto.base.ErrorResponseBody
+import com.readnumber.dailyonestep.common.dto.ErrorResponseBody
 import com.readnumber.dailyonestep.common.error.exception.BaseException
 import com.readnumber.dailyonestep.common.error.exception.InternalServerException
 import jakarta.servlet.FilterChain
@@ -12,7 +12,6 @@ import org.springframework.http.MediaType
 import org.springframework.web.filter.OncePerRequestFilter
 import java.io.IOException
 
-// FIXME: 리펙토링 해야함.
 class GlobalBaseExceptionFilter : OncePerRequestFilter() {
     @Throws(ServletException::class, IOException::class, BaseException::class)
     override fun doFilterInternal(

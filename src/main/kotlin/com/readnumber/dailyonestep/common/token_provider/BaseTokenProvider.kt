@@ -3,7 +3,6 @@ package com.readnumber.dailyonestep.common.token_provider
 import com.readnumber.dailyonestep.common.error.exception.ExpiredTokenException
 import com.readnumber.dailyonestep.common.error.exception.InternalServerException
 import com.readnumber.dailyonestep.common.error.exception.InvalidTokenException
-import com.readnumber.dailyonestep.security.common.Authority
 import com.readnumber.dailyonestep.security.principal.UserPrincipal
 import com.readnumber.dailyonestep.security.principal.Principal
 import io.jsonwebtoken.*
@@ -11,8 +10,6 @@ import io.jsonwebtoken.security.Keys
 import io.jsonwebtoken.security.SignatureException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.authority.AuthorityUtils
 import java.nio.charset.StandardCharsets
 import java.util.*
 
@@ -78,8 +75,7 @@ abstract class BaseTokenProvider {
 
         return UsernamePasswordAuthenticationToken(
             principal,
-            "",
-            innerGetSimpleAuthorities()
+            ""
         )
     }
 
@@ -92,10 +88,6 @@ abstract class BaseTokenProvider {
         val principal = authentication.principal as Principal
 
         return principal.getId()
-    }
-
-    private fun innerGetSimpleAuthorities(): List<GrantedAuthority> {
-        return AuthorityUtils.commaSeparatedStringToAuthorityList(Authority.ROLE_USER)
     }
 
     private fun innerGetClaimBodyFromJwt(

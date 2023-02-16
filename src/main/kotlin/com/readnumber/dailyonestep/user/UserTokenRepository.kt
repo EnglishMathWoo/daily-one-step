@@ -6,9 +6,12 @@ import org.springframework.stereotype.Repository
 import java.util.concurrent.TimeUnit
 
 @Repository
-class UserTokenRepository(val redisTemplate: RedisTemplate<String, Any>) {
+class UserTokenRepository(
+    val redisTemplate: RedisTemplate<String, Any>
+) {
     @Value("\${authentication.user.refresh-token.expired-seconds}")
     private lateinit var tokenExpiredSeconds: String
+
     fun save(userToken: UserToken) {
         val key = innerRedisKey(userToken.refreshToken)
         val opsHash = redisTemplate.opsForHash<String, Any>()
@@ -38,6 +41,7 @@ class UserTokenRepository(val redisTemplate: RedisTemplate<String, Any>) {
     }
 
     fun innerRedisKey(refreshToken: String) = "user_tokens:$refreshToken"
+
     fun innerUserTokenToMap(userToken: UserToken) = mapOf(
         "refreshToken" to userToken.refreshToken,
         "accessToken" to userToken.accessToken,

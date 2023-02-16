@@ -6,17 +6,17 @@ import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotNull
 
 data class UserModifyDto(
-    @NotNull(message = "이름은 필수 입력값 입니다.")
-    val name: String,
+    val name: String? = null,
     @PhoneFormat
     val phone: String? = null,
     @Email
     val email: String? = null
 ) {
     fun modifyEntity(user: User): User {
-        user.name = name
-        user.phone = phone
-        user.email = email
+        user.name = name ?: user.name
+        user.phone = phone ?: user.phone
+        user.email = email ?: user.email
+
         return user
     }
 }

@@ -16,7 +16,7 @@ data class UserDto(
     companion object {
         fun from(entity: User): UserDto {
             return UserDto(
-                id = entity.id ?: throw InternalServerException("entity는 id값이 존재해야한다."),
+                id = entity.id ?: throw InternalServerException("entity는 id 값이 있어야 합니다."),
                 username = entity.username,
                 name = entity.name,
                 phone = entity.phone,

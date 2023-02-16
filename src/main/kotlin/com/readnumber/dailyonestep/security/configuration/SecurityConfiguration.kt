@@ -2,15 +2,11 @@ package com.readnumber.dailyonestep.security.configuration
 
 import com.readnumber.dailyonestep.common.token_provider.UserAccessTokenProvider
 import com.readnumber.dailyonestep.common.token_provider.UserRefreshTokenProvider
-import com.readnumber.dailyonestep.security.common.Authority
 import com.readnumber.dailyonestep.security.common.DelegatedAccessDeniedHandler
 import com.readnumber.dailyonestep.security.common.DelegatedAuthenticationEntryPoint
-import com.readnumber.dailyonestep.security.crypto.SymmetricCrypto
 import com.readnumber.dailyonestep.security.filter.UserAccessTokenFilter
 import com.readnumber.dailyonestep.security.filter.UserRefreshTokenFilter
 import com.readnumber.dailyonestep.security.filter.GlobalBaseExceptionFilter
-import com.readnumber.dailyonestep.security.handler.UserAuthHandler
-import io.jsonwebtoken.JwtParser
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -30,9 +26,6 @@ class SecurityConfiguration {
     @Throws(Exception::class)
     fun filterChain(
         http: HttpSecurity,
-        userAuthHandler: UserAuthHandler,
-        symmetricCrypto: SymmetricCrypto,
-        jwtParser: JwtParser,
         accessDeniedHandler: DelegatedAccessDeniedHandler,
         authenticationEntryPoint: DelegatedAuthenticationEntryPoint,
         userAccessTokenProvider: UserAccessTokenProvider,

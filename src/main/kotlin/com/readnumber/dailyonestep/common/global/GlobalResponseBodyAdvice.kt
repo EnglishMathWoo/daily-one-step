@@ -1,6 +1,6 @@
 package com.readnumber.dailyonestep.common.global
 
-import com.readnumber.dailyonestep.common.dto.base.SuccessResponseBody
+import com.readnumber.dailyonestep.common.dto.SuccessResponseBody
 import org.springframework.core.MethodParameter
 import org.springframework.http.MediaType
 import org.springframework.http.converter.HttpMessageConverter

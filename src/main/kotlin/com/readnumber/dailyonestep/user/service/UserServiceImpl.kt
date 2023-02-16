@@ -20,11 +20,11 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserServiceImpl(
-    private val passwordEncoder: PasswordEncoder,
-    private val accessTokenProvider: UserAccessTokenProvider,
-    private val refreshTokenProvider: UserRefreshTokenProvider,
-    private val userRepository: UserRepository,
-    private val tokenRepository: UserTokenRepository,
+        private val passwordEncoder: PasswordEncoder,
+        private val accessTokenProvider: UserAccessTokenProvider,
+        private val refreshTokenProvider: UserRefreshTokenProvider,
+        private val userRepository: UserRepository,
+        private val tokenRepository: UserTokenRepository,
 ) : UserService {
 
     @Transactional
@@ -71,17 +71,17 @@ class UserServiceImpl(
     @Transactional
     override fun signIn(dto: UserSignInRequestDto): TokenResponseDto {
         val user = userRepository.findByUsername(dto.username)
-                ?: throw NotFoundResourceException("username이 일치하는 어드민을 찾지 못했습니다.")
+            ?: throw NotFoundResourceException("username이 일치하는 어드민을 찾지 못했습니다.")
 
         if (!passwordEncoder.matches(dto.password, user.encryptedPassword)) {
             throw IncorrectPasswordException("비밀번호가 일치하지 않습니다.")
         }
 
         val accessToken = accessTokenProvider.generateToken(
-                id = user.id!!, subject = TokenSubjectEnum.SIGN_IN
+            id = user.id!!, subject = TokenSubjectEnum.SIGN_IN
         )
         val refreshToken = refreshTokenProvider.generateToken(
-                id = user.id!!, subject = TokenSubjectEnum.SIGN_IN
+            id = user.id!!, subject = TokenSubjectEnum.SIGN_IN
         )
 
         if (tokenRepository.findByRefreshToken(refreshToken) != null) {
@@ -89,9 +89,9 @@ class UserServiceImpl(
         }
 
         val newUserToken = UserToken(
-                accessToken = accessToken,
-                refreshToken = refreshToken,
-                userId = user.id ?: throw InternalServerException("유저 id 값이 올바르지 않습니다.")
+            accessToken = accessToken,
+            refreshToken = refreshToken,
+            userId = user.id ?: throw InternalServerException("유저 id 값이 올바르지 않습니다.")
         )
 
         tokenRepository.save(newUserToken)
@@ -104,15 +104,15 @@ class UserServiceImpl(
         val userId = refreshTokenProvider.getAuthenticationIdFromToken(refreshToken)
 
         val userToken = tokenRepository.findByRefreshToken(refreshToken)
-                ?: throw NotFoundResourceException("refresh token을 찾을 수 없습니다.")
+            ?: throw NotFoundResourceException("refresh token을 찾을 수 없습니다.")
 
         if (userToken.accessToken != latelyAccessToken) {
             throw InvalidTokenException("유효한 액세스 토큰이 아닙니다.")
         }
 
         val newAccessToken = accessTokenProvider.generateToken(
-                id = userId,
-                subject = TokenSubjectEnum.REFRESH_ACCESS_TOKEN,
+            id = userId,
+            subject = TokenSubjectEnum.REFRESH_ACCESS_TOKEN,
         )
 
         userToken.accessToken = newAccessToken
@@ -124,7 +124,7 @@ class UserServiceImpl(
     @Transactional
     override fun releaseRefreshToken(refreshToken: String) {
         val userToken = tokenRepository.findByRefreshToken(refreshToken)
-                ?: throw NotFoundResourceException("일치하는 refresh token을 찾지 못했습니다.")
+            ?: throw NotFoundResourceException("일치하는 refresh token을 찾지 못했습니다.")
 
         try {
             tokenRepository.delete(userToken)

@@ -29,14 +29,11 @@ class AuthenticationFacadeImpl : AuthenticationFacade {
     }
 
     private fun getAuthenticationOrThrowEx(): Authentication {
-        // security filter chain 을 통해 들어온 요청이 아닐 시 null 입니다.
         return SecurityContextHolder.getContext().authentication
             ?: throw AccessDeniedException("허가되지 않은 접근 입니다.")
     }
 
     private fun isAnonymous(principal: Any): Boolean {
-        // Test 코드 실행시 익명 인증객체의 principal 를 위함
-        // @WithAnonymousUser
         return principal == "anonymous" || principal == "anonymousUser"
     }
 }
