@@ -1,6 +1,4 @@
-package com.readnumber.dailyonestep.post.dto.request
-
-import com.readnumber.dailyonestep.post.dto.response.PostDto
+package com.readnumber.dailyonestep.post.dto.response
 
 class PostWrapperDto(
     val post: PostDto

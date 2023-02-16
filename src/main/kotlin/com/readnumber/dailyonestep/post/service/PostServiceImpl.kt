@@ -10,7 +10,6 @@ import com.readnumber.dailyonestep.post.dto.request.PostCreateDto
 import com.readnumber.dailyonestep.post.dto.request.PostModifyDto
 import com.readnumber.dailyonestep.post.dto.request.PostSearchQueryParameter
 import com.readnumber.dailyonestep.post.dto.response.MultiplePostWrapperDto
-import com.readnumber.dailyonestep.post.dto.response.PostSimpleDto
 import com.readnumber.dailyonestep.user.User
 import com.readnumber.dailyonestep.user.UserRepository
 import org.springframework.dao.EmptyResultDataAccessException
@@ -37,7 +36,8 @@ class PostServiceImpl(
             dto.toEntity()
         )
         val createdBy = innerGetUser(post.createdBy!!)
-        return PostDto.from(post, createdBy)!!
+
+        return PostDto.from(post, createdBy)
     }
 
     @Transactional(readOnly = true)
@@ -47,7 +47,20 @@ class PostServiceImpl(
         val post = innerGetPost(id)
         val createdBy = innerGetUser(post.createdBy!!)
         val updatedBy = innerGetUser(post.updatedBy!!)
-        return PostDto.from(post, createdBy, updatedBy)!!
+
+        return PostDto.from(post, createdBy, updatedBy)
+    }
+
+    @Transactional(readOnly = true)
+    override fun getMyPosts(
+        userId: Long
+    ): MultiplePostWrapperDto {
+        val posts = innerGetMyPosts(userId)
+
+        return MultiplePostWrapperDto(
+            totalCount = posts.size,
+            posts = posts.map{ PostDto.from(it, innerGetUser(it.createdBy!!), innerGetUser(it.updatedBy!!)) }
+        )
     }
 
     @Transactional(readOnly = true)
@@ -58,8 +71,8 @@ class PostServiceImpl(
         val page = postRepositorySupport.searchAll(queryParam, pageable)
 
         return MultiplePostWrapperDto(
-            totalCount = page.totalElements,
-            posts = page.content.map { PostDto.from(it)!! }
+            totalCount = page.totalElements.toInt(),
+            posts = page.content.map { PostDto.from(it, innerGetUser(it.createdBy!!), innerGetUser(it.updatedBy!!)) }
         )
     }
 
@@ -72,7 +85,8 @@ class PostServiceImpl(
         val post = postRepository.save(modifiedPost)
         val createdBy = innerGetUser(post.createdBy!!)
         val updatedBy = innerGetUser(post.updatedBy!!)
-        return PostDto.from(post, createdBy, updatedBy)!!
+
+        return PostDto.from(post, createdBy, updatedBy)
     }
 
     @Transactional
@@ -90,11 +104,16 @@ class PostServiceImpl(
 
     fun innerGetUser(id: Long): User {
         return userRepository.findById(id)
-                .orElseThrow { throw NotFoundResourceException("일치하는 유저를 찾을 수 없습니다.") }
+            .orElseThrow { throw NotFoundResourceException("일치하는 유저를 찾을 수 없습니다.") }
     }
 
     fun innerGetPost(id: Long): Post {
         return postRepository.findById(id)
             .orElseThrow { throw NotFoundResourceException("일치하는 게시글을 찾을 수 없습니다.") }
+    }
+
+    fun innerGetMyPosts(userId: Long): List<Post> {
+        return postRepository.findAllByUserId(userId)
+            .orElseThrow { throw NotFoundResourceException("일치하는 내 게시글을 찾을 수 없습니다.") }
     }
 }

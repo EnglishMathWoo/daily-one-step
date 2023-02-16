@@ -18,6 +18,10 @@ interface PostService {
         id: Long
     ): PostDto
 
+    fun getMyPosts(
+        userId: Long
+    ): MultiplePostWrapperDto
+
     fun findPosts(
         queryParam: PostSearchQueryParameter,
         pageable: Pageable,
