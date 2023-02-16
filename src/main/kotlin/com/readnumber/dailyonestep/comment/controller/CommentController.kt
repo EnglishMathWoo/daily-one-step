@@ -4,11 +4,16 @@ import com.readnumber.dailyonestep.comment.dto.request.CommentCreateDto
 import com.readnumber.dailyonestep.comment.dto.request.CommentModifyDto
 import com.readnumber.dailyonestep.comment.dto.response.CommentWrapperDto
 import com.readnumber.dailyonestep.comment.dto.response.MultipleCommentWrapperDto
+import com.readnumber.dailyonestep.post.dto.response.PostWrapperDto
 
 interface CommentController {
     fun createComment(
         dto: CommentCreateDto
     ): CommentWrapperDto
+
+    fun getComments(
+        id: Long
+    ): MultipleCommentWrapperDto
 
     fun getMyComments(
         userId: Long

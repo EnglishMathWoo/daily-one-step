@@ -58,8 +58,12 @@ class PostServiceImpl(
         val posts = innerGetMyPosts(userId)
 
         return MultiplePostWrapperDto(
-            totalCount = posts.size,
-            posts = posts.map{ PostDto.from(it, innerGetUser(it.createdBy!!), innerGetUser(it.updatedBy!!)) }
+            totalCount = posts?.size ?: 0,
+            posts = posts?.map { PostDto.from(
+                it,
+                innerGetUser(it.createdBy!!),
+                innerGetUser(it.updatedBy!!))
+            }
         )
     }
 
@@ -72,7 +76,11 @@ class PostServiceImpl(
 
         return MultiplePostWrapperDto(
             totalCount = page.totalElements.toInt(),
-            posts = page.content.map { PostDto.from(it, innerGetUser(it.createdBy!!), innerGetUser(it.updatedBy!!)) }
+            posts = page.content.map { PostDto.from(
+                it,
+                innerGetUser(it.createdBy!!),
+                innerGetUser(it.updatedBy!!))
+            }
         )
     }
 
@@ -82,11 +90,10 @@ class PostServiceImpl(
         dto: PostModifyDto
     ): PostDto {
         val modifiedPost = dto.modifyEntity(innerGetPost(id))
-        val post = postRepository.save(modifiedPost)
-        val createdBy = innerGetUser(post.createdBy!!)
-        val updatedBy = innerGetUser(post.updatedBy!!)
+        val createdBy = innerGetUser(modifiedPost.createdBy!!)
+        val updatedBy = innerGetUser(modifiedPost.updatedBy!!)
 
-        return PostDto.from(post, createdBy, updatedBy)
+        return PostDto.from(modifiedPost, createdBy, updatedBy)
     }
 
     @Transactional
@@ -112,8 +119,7 @@ class PostServiceImpl(
             .orElseThrow { throw NotFoundResourceException("일치하는 게시글을 찾을 수 없습니다.") }
     }
 
-    fun innerGetMyPosts(userId: Long): List<Post> {
+    fun innerGetMyPosts(userId: Long): List<Post>? {
         return postRepository.findAllByUserId(userId)
-            .orElseThrow { throw NotFoundResourceException("일치하는 내 게시글을 찾을 수 없습니다.") }
     }
 }

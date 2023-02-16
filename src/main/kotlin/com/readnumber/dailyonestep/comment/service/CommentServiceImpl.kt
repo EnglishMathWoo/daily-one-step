@@ -10,6 +10,7 @@ import com.readnumber.dailyonestep.common.error.exception.InternalServerExceptio
 import com.readnumber.dailyonestep.common.error.exception.NotFoundResourceException
 import com.readnumber.dailyonestep.post.Post
 import com.readnumber.dailyonestep.post.PostRepository
+import com.readnumber.dailyonestep.post.dto.response.PostDto
 import com.readnumber.dailyonestep.user.User
 import com.readnumber.dailyonestep.user.UserRepository
 import org.springframework.dao.EmptyResultDataAccessException
@@ -41,14 +42,34 @@ class CommentServiceImpl(
     }
 
     @Transactional(readOnly = true)
+    override fun getComments(
+        id: Long
+    ): MultipleCommentWrapperDto {
+        val comments = innerGetCommentByPostId(id)
+
+        return MultipleCommentWrapperDto(
+            totalCount = comments?.size ?: 0,
+            comments = comments?.map { CommentDto.from(
+                it,
+                innerGetUser(it.createdBy!!),
+                innerGetUser(it.updatedBy!!))
+            }
+        )
+    }
+
+    @Transactional(readOnly = true)
     override fun getMyComments(
         userId: Long
     ): MultipleCommentWrapperDto {
         val comments = innerGetMyComments(userId)
 
         return MultipleCommentWrapperDto(
-            totalCount = comments.size,
-            comments = comments.map{ CommentDto.from(it, innerGetUser(it.createdBy!!), innerGetUser(it.updatedBy!!)) }
+            totalCount = comments?.size ?: 0,
+            comments = comments?.map { CommentDto.from(
+                it,
+                innerGetUser(it.createdBy!!),
+                innerGetUser(it.updatedBy!!))
+            }
         )
     }
 
@@ -58,11 +79,10 @@ class CommentServiceImpl(
         dto: CommentModifyDto
     ): CommentDto {
         val modifiedComment = dto.modifyEntity(innerGetComment(id))
-        val comment = commentRepository.save(modifiedComment)
-        val createdBy = innerGetUser(comment.createdBy!!)
-        val updatedBy = innerGetUser(comment.updatedBy!!)
+        val createdBy = innerGetUser(modifiedComment.createdBy!!)
+        val updatedBy = innerGetUser(modifiedComment.updatedBy!!)
 
-        return CommentDto.from(comment , createdBy, updatedBy)
+        return CommentDto.from(modifiedComment , createdBy, updatedBy)
     }
 
     @Transactional
@@ -93,8 +113,11 @@ class CommentServiceImpl(
             .orElseThrow { throw NotFoundResourceException("일치하는 댓글을 찾을 수 없습니다.") }
     }
 
-    fun innerGetMyComments(userId: Long): List<Comment> {
+    fun innerGetCommentByPostId(postId: Long): List<Comment>? {
+        return commentRepository.findAllByPostId(postId)
+    }
+
+    fun innerGetMyComments(userId: Long): List<Comment>? {
         return commentRepository.findAllByUserId(userId)
-            .orElseThrow { throw NotFoundResourceException("일치하는 내 댓글을 찾을 수 없습니다.") }
     }
 }

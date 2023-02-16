@@ -4,6 +4,8 @@ import com.readnumber.dailyonestep.comment.dto.request.CommentCreateDto
 import com.readnumber.dailyonestep.comment.dto.request.CommentModifyDto
 import com.readnumber.dailyonestep.comment.dto.response.CommentDto
 import com.readnumber.dailyonestep.comment.dto.response.MultipleCommentWrapperDto
+import com.readnumber.dailyonestep.post.dto.response.PostDto
+import org.springframework.transaction.annotation.Transactional
 
 interface CommentService {
     fun getCommentCount(): Long
@@ -11,6 +13,10 @@ interface CommentService {
     fun createComment(
         dto: CommentCreateDto
     ): CommentDto
+
+    fun getComments(
+        id: Long
+    ): MultipleCommentWrapperDto
 
     fun getMyComments(
         userId: Long

@@ -1,5 +1,6 @@
 package com.readnumber.dailyonestep.post.dto.response
 
+import com.readnumber.dailyonestep.comment.Comment
 import com.readnumber.dailyonestep.common.error.exception.InternalServerException
 import com.readnumber.dailyonestep.post.Post
 import com.readnumber.dailyonestep.user.User

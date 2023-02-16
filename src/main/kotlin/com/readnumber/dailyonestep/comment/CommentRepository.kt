@@ -13,5 +13,14 @@ interface CommentRepository : JpaRepository<Comment, Long> {
     fun findAllByUserId(
         @Param("userId")
         userId: Long
-    ): Optional<List<Comment>>
+    ): List<Comment>?
+
+    @Query(value = "SELECT comment " +
+            "FROM Comment comment " +
+            "WHERE comment.post.id = :#{#postId} "
+    )
+    fun findAllByPostId(
+        @Param("postId")
+        postId: Long
+    ): List<Comment>?
 }

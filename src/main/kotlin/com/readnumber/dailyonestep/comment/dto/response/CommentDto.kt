@@ -16,12 +16,12 @@ data class CommentDto(
 ) {
     companion object {
         fun from(
-            entity: Comment,
+            entity: Comment?,
             createdBy: User? = null,
             updatedBy: User? = null,
         ): CommentDto {
             return CommentDto(
-                id = entity.id ?: throw InternalServerException("entity는 id 값이 있어야 합니다."),
+                id = entity?.id ?: throw InternalServerException("entity는 id 값이 있어야 합니다."),
                 content = entity.content,
                 createdAt = entity.createdAt,
                 updatedAt = entity.updatedAt,
