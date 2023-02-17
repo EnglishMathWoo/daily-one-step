@@ -2,6 +2,7 @@ package com.readnumber.dailyonestep.post.service
 
 import com.readnumber.dailyonestep.common.error.exception.InternalServerException
 import com.readnumber.dailyonestep.common.error.exception.NotFoundResourceException
+import com.readnumber.dailyonestep.favorite.FavoriteRepository
 import com.readnumber.dailyonestep.post.Post
 import com.readnumber.dailyonestep.post.PostRepository
 import com.readnumber.dailyonestep.post.PostRepositorySupport
@@ -21,7 +22,8 @@ import org.springframework.transaction.annotation.Transactional
 class PostServiceImpl(
     private val userRepository: UserRepository,
     private val postRepository: PostRepository,
-    private val postRepositorySupport: PostRepositorySupport
+    private val postRepositorySupport: PostRepositorySupport,
+    private  val favoriteRepository: FavoriteRepository
 ) : PostService {
     @Transactional(readOnly = true)
     override fun getPostCount(): Long {
@@ -37,18 +39,28 @@ class PostServiceImpl(
         )
         val createdBy = innerGetUser(post.createdBy!!)
 
-        return PostDto.from(post, createdBy)
+        return PostDto.from(
+            post,
+            createdBy = createdBy
+        )
     }
 
     @Transactional(readOnly = true)
     override fun getPost(
-        id: Long
+        postId: Long,
+        userId: Long
     ): PostDto {
-        val post = innerGetPost(id)
+        val post = innerGetPost(postId)
+        val favorite = innerCheckExistingFavorite(postId, userId)
         val createdBy = innerGetUser(post.createdBy!!)
         val updatedBy = innerGetUser(post.updatedBy!!)
 
-        return PostDto.from(post, createdBy, updatedBy)
+        return PostDto.from(
+            post,
+            favorite = favorite,
+            createdBy = createdBy,
+            updatedBy = updatedBy
+        )
     }
 
     @Transactional(readOnly = true)
@@ -61,8 +73,9 @@ class PostServiceImpl(
             totalCount = posts?.size ?: 0,
             posts = posts?.map { PostDto.from(
                 it,
-                innerGetUser(it.createdBy!!),
-                innerGetUser(it.updatedBy!!))
+                createdBy = innerGetUser(it.createdBy!!),
+                updatedBy = innerGetUser(it.updatedBy!!)
+            )
             }
         )
     }
@@ -78,8 +91,9 @@ class PostServiceImpl(
             totalCount = page.totalElements.toInt(),
             posts = page.content.map { PostDto.from(
                 it,
-                innerGetUser(it.createdBy!!),
-                innerGetUser(it.updatedBy!!))
+                createdBy = innerGetUser(it.createdBy!!),
+                updatedBy = innerGetUser(it.updatedBy!!)
+            )
             }
         )
     }
@@ -93,7 +107,11 @@ class PostServiceImpl(
         val createdBy = innerGetUser(modifiedPost.createdBy!!)
         val updatedBy = innerGetUser(modifiedPost.updatedBy!!)
 
-        return PostDto.from(modifiedPost, createdBy, updatedBy)
+        return PostDto.from(
+            modifiedPost,
+            createdBy = createdBy,
+            updatedBy = updatedBy
+        )
     }
 
     @Transactional
@@ -121,5 +139,12 @@ class PostServiceImpl(
 
     private fun innerGetMyPosts(userId: Long): List<Post>? {
         return postRepository.findAllByUserId(userId)
+    }
+
+    private fun innerCheckExistingFavorite(postId: Long, userId: Long): Boolean {
+        val favorite = favoriteRepository.findByPostIdAndUserId(postId, userId)
+        if(favorite != null) return true
+
+        return false
     }
 }

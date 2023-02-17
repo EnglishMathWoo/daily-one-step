@@ -29,15 +29,14 @@ class FavoriteServiceImpl(
         postId: Long,
         userId: Long
     ): Any? {
-        if(innerCheckExistFavorite(postId, userId)) {
+        if(innerCheckExistingFavorite(postId, userId)) {
             val post = innerGetPost(postId)
             val favoriteEntity = Favorite(post)
-            val favorite = favoriteRepository.save(favoriteEntity)
-            val createdBy = innerGetUser(favorite.createdBy!!)
+            favoriteRepository.save(favoriteEntity)
 
-            return FavoriteDto.from(favorite, createdBy)
+            return true
         }
-        return null
+        return false
     }
 
     @Transactional(readOnly = true)
@@ -50,8 +49,9 @@ class FavoriteServiceImpl(
             totalCount = favorite?.size ?: 0,
             posts = favorite?.map { PostDto.from(
                 it.post!!,
-                innerGetUser(it.post!!.createdBy!!),
-                innerGetUser(it.post!!.updatedBy!!))
+                createdBy = innerGetUser(it.post!!.createdBy!!),
+                updatedBy = innerGetUser(it.post!!.updatedBy!!)
+            )
             }
         )
     }
@@ -70,10 +70,10 @@ class FavoriteServiceImpl(
         return favoriteRepository.findAllByUserId(userId)
     }
 
-    private fun innerCheckExistFavorite(postId: Long, userId: Long): Boolean {
-        val favorite = favoriteRepository.findByPostId(postId)
+    private fun innerCheckExistingFavorite(postId: Long, userId: Long): Boolean {
+        val favorite = favoriteRepository.findByPostIdAndUserId(postId, userId)
 
-        if(favorite?.createdBy == userId) {
+        if(favorite != null) {
             favoriteRepository.deleteById(favorite.id!!)
             return false
         }

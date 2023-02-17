@@ -17,9 +17,9 @@ data class CommentDto(
 ) {
     companion object {
         fun from(
-                entity: Comment?,
-                createdBy: User? = null,
-                updatedBy: User? = null,
+            entity: Comment?,
+            createdBy: User? = null,
+            updatedBy: User? = null,
         ): CommentDto {
             return CommentDto(
                 id = entity?.id ?: throw InternalServerException("entity는 id 값이 있어야 합니다."),

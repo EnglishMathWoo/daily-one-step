@@ -31,9 +31,11 @@ class PostControllerImpl(
     @GetMapping("/{id}")
     override fun getPost(
         @PathVariable(value = "id")
-        id: Long
+        postId: Long,
+        @ValidUserIdFromAccessToken
+        userId: Long
     ): PostWrapperDto {
-        return PostWrapperDto.from(postService.getPost(id))
+        return PostWrapperDto.from(postService.getPost(postId, userId))
     }
 
     @GetMapping("/me")

@@ -15,7 +15,8 @@ interface PostService {
     ): PostDto
 
     fun getPost(
-        id: Long
+        postId: Long,
+        userId: Long
     ): PostDto
 
     fun getMyPosts(

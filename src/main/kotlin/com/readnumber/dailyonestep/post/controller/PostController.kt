@@ -14,7 +14,8 @@ interface PostController {
     ): PostWrapperDto
 
     fun getPost(
-        id: Long
+        postId: Long,
+        userId: Long
     ): PostWrapperDto
 
     fun getMyPosts(

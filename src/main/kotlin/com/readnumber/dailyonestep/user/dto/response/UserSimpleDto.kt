@@ -15,7 +15,7 @@ data class UserSimpleDto(
             }
 
             return UserSimpleDto(
-                id = entity.id ?: throw InternalServerException("entity의 id(pk)값은 존재해야 합니다."),
+                id = entity.id ?: throw InternalServerException("entity는 id 값이 존재해야 합니다."),
                 username = entity.username,
                 name = entity.name,
             )
