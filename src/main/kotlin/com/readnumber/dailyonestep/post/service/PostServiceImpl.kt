@@ -103,23 +103,23 @@ class PostServiceImpl(
         } catch (e: Exception) {
             when (e) {
                 is EmptyResultDataAccessException ->
-                    throw NotFoundResourceException("존재하지 않는 게시글입니다.")
+                    throw NotFoundResourceException("존재하지 않는 게시글 입니다.")
             }
             throw InternalServerException("알 수 없는 원인으로 게시글 엔티티 삭제에 실패했습니다.")
         }
     }
 
-    fun innerGetUser(id: Long): User {
+    private fun innerGetUser(id: Long): User {
         return userRepository.findById(id)
             .orElseThrow { throw NotFoundResourceException("일치하는 유저를 찾을 수 없습니다.") }
     }
 
-    fun innerGetPost(id: Long): Post {
+    private fun innerGetPost(id: Long): Post {
         return postRepository.findById(id)
             .orElseThrow { throw NotFoundResourceException("일치하는 게시글을 찾을 수 없습니다.") }
     }
 
-    fun innerGetMyPosts(userId: Long): List<Post>? {
+    private fun innerGetMyPosts(userId: Long): List<Post>? {
         return postRepository.findAllByUserId(userId)
     }
 }

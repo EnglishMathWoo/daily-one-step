@@ -1,15 +1,13 @@
-package com.readnumber.dailyonestep.comment.dto.response
+package com.readnumber.dailyonestep.favorite.dto
 
-import com.readnumber.dailyonestep.comment.Comment
 import com.readnumber.dailyonestep.common.error.exception.InternalServerException
+import com.readnumber.dailyonestep.favorite.Favorite
 import com.readnumber.dailyonestep.user.User
 import com.readnumber.dailyonestep.user.dto.response.UserSimpleDto
 import java.time.LocalDateTime
-import java.util.*
 
-data class CommentDto(
+data class FavoriteDto(
     val id: Long,
-    val content: String,
     val createdAt: LocalDateTime?,
     val updatedAt: LocalDateTime?,
     val createdBy: UserSimpleDto?,
@@ -17,13 +15,12 @@ data class CommentDto(
 ) {
     companion object {
         fun from(
-                entity: Comment?,
-                createdBy: User? = null,
-                updatedBy: User? = null,
-        ): CommentDto {
-            return CommentDto(
+            entity: Favorite?,
+            createdBy: User? = null,
+            updatedBy: User? = null,
+        ): FavoriteDto {
+            return FavoriteDto(
                 id = entity?.id ?: throw InternalServerException("entity는 id 값이 있어야 합니다."),
-                content = entity.content,
                 createdAt = entity.createdAt,
                 updatedAt = entity.updatedAt,
                 createdBy = UserSimpleDto.from(createdBy),

@@ -14,6 +14,7 @@ import com.readnumber.dailyonestep.user.dto.request.UserSignInRequestDto
 import com.readnumber.dailyonestep.user.dto.request.UserSignUpDto
 import com.readnumber.dailyonestep.user.dto.response.TokenResponseDto
 import com.readnumber.dailyonestep.user.dto.response.UserDto
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -51,10 +52,33 @@ class UserServiceImpl(
     }
 
     @Transactional
-    override fun modify(id: Long, dto: UserModifyDto): UserDto {
+    override fun modifyUser(
+        id: Long,
+        dto: UserModifyDto
+    ): UserDto {
         val user = getUserAndThrowExIfNotExisted(id)
         dto.modifyEntity(user)
         return UserDto.from(user)
+    }
+
+    @Transactional
+    override fun deleteUser(
+        id: Long,
+        refreshToken: String
+    ) {
+        try {
+            val userToken = tokenRepository.findByRefreshToken(refreshToken)
+                    ?: throw NotFoundResourceException("일치하는 refresh token을 찾지 못했습니다.")
+
+            userRepository.deleteById(id)
+            tokenRepository.delete(userToken)
+        } catch (e: Exception) {
+            when (e) {
+                is EmptyResultDataAccessException ->
+                    throw NotFoundResourceException("존재하지 않는 유저 입니다.")
+            }
+            throw InternalServerException("알 수 없는 원인으로 유저 엔티티 삭제에 실패했습니다.")
+        }
     }
 
     @Transactional(readOnly = true)

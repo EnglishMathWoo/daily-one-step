@@ -92,7 +92,7 @@ class CommentServiceImpl(
         } catch (e: Exception) {
             when (e) {
                 is EmptyResultDataAccessException ->
-                    throw NotFoundResourceException("존재하지 않는 댓글입니다.")
+                    throw NotFoundResourceException("존재하지 않는 댓글 입니다.")
             }
             throw InternalServerException("알 수 없는 원인으로 댓글 엔티티 삭제에 실패했습니다.")
         }
@@ -103,21 +103,21 @@ class CommentServiceImpl(
             .orElseThrow { throw NotFoundResourceException("일치하는 유저를 찾을 수 없습니다.") }
     }
 
-    fun innerGetPost(postId: Long): Post {
+    private fun innerGetPost(postId: Long): Post {
         return postRepository.findById(postId)
             .orElseThrow { throw NotFoundResourceException("일치하는 게시글을 찾을 수 없습니다.") }
     }
 
-    fun innerGetComment(id: Long): Comment {
+    private fun innerGetComment(id: Long): Comment {
         return commentRepository.findById(id)
             .orElseThrow { throw NotFoundResourceException("일치하는 댓글을 찾을 수 없습니다.") }
     }
 
-    fun innerGetCommentByPostId(postId: Long): List<Comment>? {
+    private fun innerGetCommentByPostId(postId: Long): List<Comment>? {
         return commentRepository.findAllByPostId(postId)
     }
 
-    fun innerGetMyComments(userId: Long): List<Comment>? {
+    private fun innerGetMyComments(userId: Long): List<Comment>? {
         return commentRepository.findAllByUserId(userId)
     }
 }

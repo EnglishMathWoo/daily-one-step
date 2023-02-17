@@ -18,6 +18,11 @@ interface UserController {
         dto: UserModifyDto
     ): UserWrapperDto
 
+    fun deleteUser(
+        id: Long,
+        refreshToken: String
+    ): Boolean
+
     fun changeUserPassword(
         userId: Long,
         dto: UserChangePasswordDto

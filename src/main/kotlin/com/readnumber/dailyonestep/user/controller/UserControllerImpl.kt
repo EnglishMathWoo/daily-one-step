@@ -30,8 +30,19 @@ class UserControllerImpl(
         @Valid @RequestBody
         dto: UserModifyDto
     ): UserWrapperDto {
-        val user = userService.modify(userId, dto)
+        val user = userService.modifyUser(userId, dto)
         return UserWrapperDto.from(user)
+    }
+
+    @DeleteMapping
+    override fun deleteUser(
+        @ValidUserIdFromAccessToken
+        id: Long,
+        @ValidJwtHeader
+        refreshToken: String
+    ): Boolean {
+        userService.deleteUser(id, refreshToken)
+        return true
     }
 
     @PutMapping("/passwords")
