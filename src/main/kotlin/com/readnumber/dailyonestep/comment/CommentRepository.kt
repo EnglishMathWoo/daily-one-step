@@ -17,10 +17,10 @@ interface CommentRepository : JpaRepository<Comment, Long> {
 
     @Query(value = "SELECT comment " +
             "FROM Comment comment " +
-            "WHERE comment.post.id = :#{#postId} "
+            "WHERE comment.notice.id = :#{#noticeId} "
     )
-    fun findAllByPostId(
-        @Param("postId")
-        postId: Long
+    fun findAllByNoticeId(
+        @Param("noticeId")
+        noticeId: Long
     ): List<Comment>?
 }

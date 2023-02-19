@@ -2,29 +2,29 @@ package com.readnumber.dailyonestep.favorite.controller
 
 import com.readnumber.dailyonestep.common.binding_annotation.ValidUserIdFromAccessToken
 import com.readnumber.dailyonestep.favorite.service.FavoriteService
-import com.readnumber.dailyonestep.post.dto.response.MultiplePostWrapperDto
+import com.readnumber.dailyonestep.notice.dto.response.MultipleNoticeWrapperDto
 import org.springframework.web.bind.annotation.*
 
-@RequestMapping("/favorites")
+@RequestMapping
 @RestController
 class FavoriteControllerImpl(
     private val favoriteService: FavoriteService
 ) : FavoriteController {
-    @PostMapping("/{id}")
+    @PostMapping("/notices/{id}/favorites")
     override fun createFavorite(
         @PathVariable(value = "id")
-        postId: Long,
+        noticeId: Long,
         @ValidUserIdFromAccessToken
         userId: Long
     ): Any? {
-        return favoriteService.createFavorite(postId, userId)
+        return favoriteService.createFavorite(noticeId, userId)
     }
 
-    @GetMapping("/me")
-    override fun getMyFavoritePosts(
+    @GetMapping("/favorites/me")
+    override fun getMyFavoriteNotices(
         @ValidUserIdFromAccessToken
         userId: Long
-    ): MultiplePostWrapperDto{
-        return favoriteService.getMyFavoritePosts(userId)
+    ): MultipleNoticeWrapperDto{
+        return favoriteService.getMyFavoriteNotices(userId)
     }
 }

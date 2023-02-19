@@ -1,18 +1,18 @@
 package com.readnumber.dailyonestep.comment.dto.request
 
 import com.readnumber.dailyonestep.comment.Comment
-import com.readnumber.dailyonestep.post.Post
+import com.readnumber.dailyonestep.notice.Notice
 
 class CommentCreateDto (
     val content: String,
-    val postId: Long
+    val noticeId: Long
 ) {
     fun toEntity(
-        post: Post,
+        notice: Notice,
     ): Comment {
         return Comment(
             content,
-            post
+            notice
         )
     }
 }

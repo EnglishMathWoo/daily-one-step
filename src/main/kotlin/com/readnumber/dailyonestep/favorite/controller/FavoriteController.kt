@@ -1,15 +1,15 @@
 package com.readnumber.dailyonestep.favorite.controller
 
-import com.readnumber.dailyonestep.post.dto.response.MultiplePostWrapperDto
+import com.readnumber.dailyonestep.notice.dto.response.MultipleNoticeWrapperDto
 
 interface FavoriteController {
     fun createFavorite(
-        postId: Long,
+        noticeId: Long,
         userId: Long
     ): Any?
 
 
-    fun getMyFavoritePosts(
+    fun getMyFavoriteNotices(
         userId: Long
-    ): MultiplePostWrapperDto
+    ): MultipleNoticeWrapperDto
 }

@@ -17,11 +17,11 @@ interface FavoriteRepository : JpaRepository<Favorite, Long> {
 
     @Query(value = "SELECT favorite " +
             "FROM Favorite favorite " +
-            "WHERE favorite.post.id = :#{#postId} AND favorite.createdBy = :#{#userId} "
+            "WHERE favorite.notice.id = :#{#noticeId} AND favorite.createdBy = :#{#userId} "
     )
-    fun findByPostIdAndUserId(
-        @Param("postId")
-        postId: Long,
+    fun findByNoticeIdAndUserId(
+        @Param("noticeId")
+        noticeId: Long,
         @Param("userId")
         userId: Long
     ): Favorite?

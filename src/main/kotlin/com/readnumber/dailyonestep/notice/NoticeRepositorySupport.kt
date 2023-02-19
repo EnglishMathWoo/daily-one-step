@@ -1,11 +1,11 @@
-package com.readnumber.dailyonestep.post
+package com.readnumber.dailyonestep.notice
 
 import com.querydsl.core.types.Order
 import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
-import com.readnumber.dailyonestep.post.QPost.post
-import com.readnumber.dailyonestep.post.dto.request.PostSearchQueryParameter
+import com.readnumber.dailyonestep.notice.QNotice.notice
+import com.readnumber.dailyonestep.notice.dto.request.NoticeSearchQueryParameter
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
@@ -15,23 +15,23 @@ import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
 @Repository
-class PostRepositorySupport(
+class NoticeRepositorySupport(
     private val queryFactory: JPAQueryFactory
-) : QuerydslRepositorySupport(QPost::class.java) {
+) : QuerydslRepositorySupport(QNotice::class.java) {
 
     @Transactional(readOnly = true)
     fun searchAll(
-        queryParam: PostSearchQueryParameter,
+        queryParam: NoticeSearchQueryParameter,
         pageable: Pageable?
-    ): Page<Post> {
+    ): Page<Notice> {
         val expressions = arrayOf(
             innerGetKeywordExpression(queryParam.keyword)
         )
 
         if (pageable == null) {
-            val content: List<Post> = queryFactory
-                .select(post)
-                .from(post)
+            val content: List<Notice> = queryFactory
+                .select(notice)
+                .from(notice)
                 .where(*expressions)
                 .fetch()
 
@@ -39,15 +39,15 @@ class PostRepositorySupport(
         }
 
         val totalCount: Long = queryFactory
-            .select(post.count())
-            .from(post)
+            .select(notice.count())
+            .from(notice)
             .where(*expressions)
             .fetchFirst()
 
         val orderBy = innerGetOrderSpecifier(pageable)
-        val content: List<Post> = queryFactory
-            .select(post)
-            .from(post)
+        val content: List<Notice> = queryFactory
+            .select(notice)
+            .from(notice)
             .where(*expressions)
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
@@ -61,24 +61,24 @@ class PostRepositorySupport(
         keyword: String?
     ): BooleanExpression? {
         if (keyword.isNullOrEmpty()) return null
-        return post.title.like("%$keyword%")
-            .or(post.content.like("%$keyword%"))
+        return notice.title.like("%$keyword%")
+            .or(notice.content.like("%$keyword%"))
     }
 
     private fun innerGetOrderSpecifier(pageable: Pageable): Array<OrderSpecifier<*>> {
         val sort: Sort = pageable.sort
         if (sort.isEmpty) {
             return arrayOf(
-                OrderSpecifier(Order.DESC, post.id)
+                OrderSpecifier(Order.DESC, notice.id)
             )
         }
         val result: List<OrderSpecifier<*>> = sort
             .map {
                 val order = if (it.direction.isAscending) Order.ASC else Order.DESC
                 val path = when (it.property) {
-                    "title" -> post.title
-                    "content" -> post.content
-                    else -> post.id
+                    "title" -> notice.title
+                    "content" -> notice.content
+                    else -> notice.id
                 }
                 OrderSpecifier(order, path)
             }.toList()

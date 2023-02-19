@@ -60,7 +60,7 @@ class SecurityConfiguration {
 
     fun environmentalAllowedOriginPatterns(): List<String>? {
         return listOf(
-            "http://localhost:[*]"
+            "http://127.0.0.1:8080"
         )
     }
 

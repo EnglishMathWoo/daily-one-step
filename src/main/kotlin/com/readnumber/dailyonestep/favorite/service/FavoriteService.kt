@@ -1,16 +1,16 @@
 package com.readnumber.dailyonestep.favorite.service
 
-import com.readnumber.dailyonestep.post.dto.response.MultiplePostWrapperDto
+import com.readnumber.dailyonestep.notice.dto.response.MultipleNoticeWrapperDto
 
 interface FavoriteService {
     fun getFavoriteCount(): Long
 
     fun createFavorite(
-        postId: Long,
+        noticeId: Long,
         userId: Long
     ): Any?
 
-    fun getMyFavoritePosts(
+    fun getMyFavoriteNotices(
         userId: Long
-    ): MultiplePostWrapperDto
+    ): MultipleNoticeWrapperDto
 }

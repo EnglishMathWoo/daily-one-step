@@ -6,17 +6,16 @@ import com.readnumber.dailyonestep.comment.dto.response.CommentWrapperDto
 import com.readnumber.dailyonestep.comment.dto.response.MultipleCommentWrapperDto
 import com.readnumber.dailyonestep.comment.service.CommentService
 import com.readnumber.dailyonestep.common.binding_annotation.ValidUserIdFromAccessToken
-import com.readnumber.dailyonestep.post.dto.response.PostWrapperDto
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 
-@RequestMapping("/comments")
+@RequestMapping
 @RestController
 class CommentControllerImpl(
     private val commentService: CommentService
 ) : CommentController {
 
-    @PostMapping
+    @PostMapping("/comments")
     override fun createComment(
         @Valid @RequestBody
         dto: CommentCreateDto
@@ -26,7 +25,7 @@ class CommentControllerImpl(
         )
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/notices/{id}/comments")
     override fun getComments(
         @PathVariable(value = "id")
         id: Long
@@ -34,7 +33,7 @@ class CommentControllerImpl(
         return commentService.getComments(id)
     }
 
-    @GetMapping("/me")
+    @GetMapping("/comments/me")
     override fun getMyComments(
         @ValidUserIdFromAccessToken
         userId: Long,
@@ -42,7 +41,7 @@ class CommentControllerImpl(
         return commentService.getMyComments(userId)
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/comments/{id}")
     override fun modifyComment(
         @PathVariable(value = "id")
         id: Long,
@@ -54,7 +53,7 @@ class CommentControllerImpl(
         )
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/comments/{id}")
     override fun deleteComment(
         @PathVariable(value = "id")
         id: Long,

@@ -14,9 +14,7 @@ plugins {
 	id("org.springframework.boot") version "3.0.2"
 	id("io.spring.dependency-management") version "1.1.0"
 	kotlin("jvm") version kotlinVersion
-	// NOTE: kotlin("plugin.noarg") version kotlinVersion 포함
 	kotlin("plugin.jpa") version kotlinVersion
-	// NOTE: kotlin("plugin.allopen") version kotlinVersion 포함
 	kotlin("plugin.spring") version kotlinVersion
 	kotlin("kapt") version kotlinVersion
 }
