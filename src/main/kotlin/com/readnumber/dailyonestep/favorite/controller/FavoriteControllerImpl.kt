@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.*
 class FavoriteControllerImpl(
     private val favoriteService: FavoriteService
 ) : FavoriteController {
-    @PostMapping("/notices/{id}/favorites")
+    @PostMapping("/notices/{noticeId}/favorites")
     override fun createFavorite(
-        @PathVariable(value = "id")
+        @PathVariable(value = "noticeId")
         noticeId: Long,
         @ValidUserIdFromAccessToken
         userId: Long

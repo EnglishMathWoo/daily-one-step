@@ -29,9 +29,10 @@ class CommentServiceImpl(
 
     @Transactional
     override fun createComment(
-        dto: CommentCreateDto
+        dto: CommentCreateDto,
+        noticeId: Long
     ): CommentDto {
-        val notice = innerGetNotice(dto.noticeId)
+        val notice = innerGetNotice(noticeId)
         val comment = commentRepository.save(
             dto.toEntity(notice)
         )
@@ -42,9 +43,9 @@ class CommentServiceImpl(
 
     @Transactional(readOnly = true)
     override fun getComments(
-        id: Long
+        noticeId: Long
     ): MultipleCommentWrapperDto {
-        val comments = innerGetCommentByNoticeId(id)
+        val comments = innerGetCommentByNoticeId(noticeId)
 
         return MultipleCommentWrapperDto(
             totalCount = comments?.size ?: 0,

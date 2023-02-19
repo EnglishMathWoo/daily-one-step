@@ -7,14 +7,14 @@ import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedBy
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
-import java.time.LocalDateTime
+import java.time.LocalDate
 import java.util.*
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener::class)
 abstract class BaseEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     val id: Long? = null,
 
     @Column
@@ -23,7 +23,7 @@ abstract class BaseEntity(
 
     @Column
     @CreatedDate
-    var createdAt: LocalDateTime = LocalDateTime.MIN,
+    var createdAt: LocalDate = LocalDate.MIN,
 
     @Column
     @LastModifiedBy
@@ -31,5 +31,5 @@ abstract class BaseEntity(
 
     @Column
     @LastModifiedDate
-    var updatedAt: LocalDateTime = LocalDateTime.MIN,
+    var updatedAt: LocalDate = LocalDate.MIN,
 )

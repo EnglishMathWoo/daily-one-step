@@ -23,9 +23,5 @@ class User(
 
     @Column
     @Comment(value = "전화번호")
-    var phone: String? = null,
-
-    @Column
-    @Comment(value = "이메일")
-    var email: String? = null
+    var phone: String? = null
 ) : BaseEntity()

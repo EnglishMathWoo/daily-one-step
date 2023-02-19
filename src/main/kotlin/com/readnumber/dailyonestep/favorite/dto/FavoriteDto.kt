@@ -4,12 +4,12 @@ import com.readnumber.dailyonestep.common.error.exception.InternalServerExceptio
 import com.readnumber.dailyonestep.favorite.Favorite
 import com.readnumber.dailyonestep.user.User
 import com.readnumber.dailyonestep.user.dto.response.UserSimpleDto
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 data class FavoriteDto(
     val id: Long,
-    val createdAt: LocalDateTime?,
-    val updatedAt: LocalDateTime?,
+    val createdAt: LocalDate?,
+    val updatedAt: LocalDate?,
     val createdBy: UserSimpleDto?,
     val updatedBy: UserSimpleDto?,
 ) {

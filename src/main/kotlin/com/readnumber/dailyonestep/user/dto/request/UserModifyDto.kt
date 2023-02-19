@@ -15,7 +15,6 @@ data class UserModifyDto(
     fun modifyEntity(user: User): User {
         user.name = name ?: user.name
         user.phone = phone ?: user.phone
-        user.email = email ?: user.email
 
         return user
     }

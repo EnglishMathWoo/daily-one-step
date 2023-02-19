@@ -7,7 +7,8 @@ import com.readnumber.dailyonestep.comment.dto.response.MultipleCommentWrapperDt
 
 interface CommentController {
     fun createComment(
-        dto: CommentCreateDto
+        dto: CommentCreateDto,
+        noticeId: Long
     ): CommentWrapperDto
 
     fun getComments(

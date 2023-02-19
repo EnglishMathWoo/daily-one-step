@@ -2,16 +2,15 @@ package com.readnumber.dailyonestep.user.dto.response
 
 import com.readnumber.dailyonestep.common.error.exception.InternalServerException
 import com.readnumber.dailyonestep.user.User
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 data class UserDto(
     val id: Long,
     val username: String,
     val name: String?,
     val phone: String?,
-    val email: String?,
-    val createdAt: LocalDateTime?,
-    val updatedAt: LocalDateTime?
+    val createdAt: LocalDate?,
+    val updatedAt: LocalDate?
 ) {
     companion object {
         fun from(entity: User): UserDto {
@@ -20,7 +19,6 @@ data class UserDto(
                 username = entity.username,
                 name = entity.name,
                 phone = entity.phone,
-                email = entity.email,
                 createdAt = entity.createdAt,
                 updatedAt = entity.updatedAt
             )

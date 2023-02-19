@@ -4,14 +4,13 @@ import com.readnumber.dailyonestep.comment.Comment
 import com.readnumber.dailyonestep.common.error.exception.InternalServerException
 import com.readnumber.dailyonestep.user.User
 import com.readnumber.dailyonestep.user.dto.response.UserSimpleDto
-import java.time.LocalDateTime
-import java.util.*
+import java.time.LocalDate
 
 data class CommentDto(
     val id: Long,
     val content: String,
-    val createdAt: LocalDateTime?,
-    val updatedAt: LocalDateTime?,
+    val createdAt: LocalDate?,
+    val updatedAt: LocalDate?,
     val createdBy: UserSimpleDto?,
     val updatedBy: UserSimpleDto?,
 ) {

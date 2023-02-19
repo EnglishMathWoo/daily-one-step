@@ -17,7 +17,6 @@ data class UserSignUpDto(
         username = username,
         encryptedPassword = encryptedPassword,
         name = name,
-        email = email,
         phone = phone
     )
 }

@@ -15,22 +15,24 @@ class CommentControllerImpl(
     private val commentService: CommentService
 ) : CommentController {
 
-    @PostMapping("/comments")
+    @PostMapping("/notices/{noticeId}/comments")
     override fun createComment(
         @Valid @RequestBody
-        dto: CommentCreateDto
+        dto: CommentCreateDto,
+        @PathVariable(value = "noticeId")
+        noticeId: Long
     ): CommentWrapperDto {
         return CommentWrapperDto.from(
-            commentService.createComment(dto)
+            commentService.createComment(dto, noticeId)
         )
     }
 
-    @GetMapping("/notices/{id}/comments")
+    @GetMapping("/notices/{noticeId}/comments")
     override fun getComments(
-        @PathVariable(value = "id")
-        id: Long
+        @PathVariable(value = "noticeId")
+        noticeId: Long
     ): MultipleCommentWrapperDto {
-        return commentService.getComments(id)
+        return commentService.getComments(noticeId)
     }
 
     @GetMapping("/comments/me")

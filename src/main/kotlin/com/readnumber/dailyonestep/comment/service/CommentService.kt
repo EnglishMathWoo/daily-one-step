@@ -9,11 +9,12 @@ interface CommentService {
     fun getCommentCount(): Long
 
     fun createComment(
-        dto: CommentCreateDto
+        dto: CommentCreateDto,
+        noticeId: Long
     ): CommentDto
 
     fun getComments(
-        id: Long
+        noticeId: Long
     ): MultipleCommentWrapperDto
 
     fun getMyComments(

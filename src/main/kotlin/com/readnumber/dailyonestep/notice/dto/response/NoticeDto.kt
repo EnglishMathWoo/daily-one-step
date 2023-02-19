@@ -4,15 +4,15 @@ import com.readnumber.dailyonestep.common.error.exception.InternalServerExceptio
 import com.readnumber.dailyonestep.notice.Notice
 import com.readnumber.dailyonestep.user.User
 import com.readnumber.dailyonestep.user.dto.response.UserSimpleDto
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 data class NoticeDto(
     val id: Long,
     val title: String,
     val content: String,
     val favorite: Boolean?,
-    val createdAt: LocalDateTime?,
-    val updatedAt: LocalDateTime?,
+    val createdAt: LocalDate?,
+    val updatedAt: LocalDate?,
     val createdBy: UserSimpleDto?,
     val updatedBy: UserSimpleDto?,
 ) {
