@@ -27,7 +27,7 @@ class FavoriteServiceImpl(
     override fun createFavorite(
         noticeId: Long,
         userId: Long
-    ): Any? {
+    ): Boolean? {
         if(innerCheckExistingFavorite(noticeId, userId)) {
             val notice = innerGetNotice(noticeId)
             val favoriteEntity = Favorite(notice)
@@ -53,6 +53,14 @@ class FavoriteServiceImpl(
             )
             }
         )
+    }
+
+    @Transactional(readOnly = true)
+    override fun getFavoriteStatus(
+        noticeId: Long,
+        userId: Long
+    ): Boolean? {
+        return innerCheckExistingFavorite(noticeId, userId)
     }
 
     private fun innerGetUser(id: Long): User {

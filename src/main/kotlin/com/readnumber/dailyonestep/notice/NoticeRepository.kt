@@ -8,7 +8,8 @@ import java.util.*
 interface NoticeRepository : JpaRepository<Notice, Long> {
     @Query(value = "SELECT notice " +
             "FROM Notice notice " +
-            "WHERE notice.createdBy = :#{#userId}")
+            "WHERE notice.createdBy = :#{#userId} " +
+            "ORDER BY notice.id DESC")
     fun findAllByUserId(
         @Param("userId")
         userId: Long

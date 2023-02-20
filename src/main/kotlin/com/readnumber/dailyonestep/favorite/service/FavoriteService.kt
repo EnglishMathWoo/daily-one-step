@@ -8,9 +8,14 @@ interface FavoriteService {
     fun createFavorite(
         noticeId: Long,
         userId: Long
-    ): Any?
+    ): Boolean?
 
     fun getMyFavoriteNotices(
         userId: Long
     ): MultipleNoticeWrapperDto
+
+    fun getFavoriteStatus(
+        noticeId: Long,
+        userId: Long
+    ): Boolean?
 }
