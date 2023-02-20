@@ -25,7 +25,7 @@ class UserAccessTokenFilter(
     private fun getJwtFromHeader(request: HttpServletRequest): String? {
         val authorization = request.getHeader("Authorization")
         if (authorization.isNullOrEmpty() || !authorization.startsWith("Bearer ")) {
-            return null;
+            return null
         }
 
         return authorization.substring(7)
