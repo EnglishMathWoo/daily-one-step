@@ -18,15 +18,10 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CommentServiceImpl(
-        private val userRepository: UserRepository,
-        private val noticeRepository: NoticeRepository,
-        private val commentRepository: CommentRepository
+    private val userRepository: UserRepository,
+    private val noticeRepository: NoticeRepository,
+    private val commentRepository: CommentRepository
 ) : CommentService {
-    @Transactional(readOnly = true)
-    override fun getCommentCount(): Long {
-        return commentRepository.count()
-    }
-
     @Transactional
     override fun createComment(
         dto: CommentCreateDto,

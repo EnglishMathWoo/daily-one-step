@@ -23,11 +23,6 @@ interface UserController {
         refreshToken: String
     ): Boolean
 
-    fun changeUserPassword(
-        userId: Long,
-        dto: UserChangePasswordDto
-    ): UserWrapperDto
-
     fun signIn(
         dto: UserSignInRequestDto
     ): Any

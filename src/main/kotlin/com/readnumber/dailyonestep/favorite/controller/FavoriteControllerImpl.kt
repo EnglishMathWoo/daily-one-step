@@ -27,14 +27,4 @@ class FavoriteControllerImpl(
     ): MultipleNoticeWrapperDto{
         return favoriteService.getMyFavoriteNotices(userId)
     }
-
-    @GetMapping("/notices/{noticeId}/favorites")
-    override fun getFavoriteStatus(
-        @PathVariable(value = "noticeId")
-        noticeId: Long,
-        @ValidUserIdFromAccessToken
-        userId: Long
-    ): Boolean? {
-        return favoriteService.getFavoriteStatus(noticeId, userId)
-    }
 }

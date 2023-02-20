@@ -6,8 +6,6 @@ import com.readnumber.dailyonestep.comment.dto.response.CommentDto
 import com.readnumber.dailyonestep.comment.dto.response.MultipleCommentWrapperDto
 
 interface CommentService {
-    fun getCommentCount(): Long
-
     fun createComment(
         dto: CommentCreateDto,
         noticeId: Long

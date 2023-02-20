@@ -5,11 +5,9 @@ import com.readnumber.dailyonestep.common.error.exception.NotFoundResourceExcept
 import com.readnumber.dailyonestep.favorite.FavoriteRepository
 import com.readnumber.dailyonestep.notice.Notice
 import com.readnumber.dailyonestep.notice.NoticeRepository
-import com.readnumber.dailyonestep.notice.NoticeRepositorySupport
 import com.readnumber.dailyonestep.notice.dto.response.NoticeDto
 import com.readnumber.dailyonestep.notice.dto.request.NoticeCreateDto
 import com.readnumber.dailyonestep.notice.dto.request.NoticeModifyDto
-import com.readnumber.dailyonestep.notice.dto.request.NoticeSearchQueryParameter
 import com.readnumber.dailyonestep.notice.dto.response.MultipleNoticeWrapperDto
 import com.readnumber.dailyonestep.user.User
 import com.readnumber.dailyonestep.user.UserRepository
@@ -22,14 +20,8 @@ import org.springframework.transaction.annotation.Transactional
 class NoticeServiceImpl(
     private val userRepository: UserRepository,
     private val noticeRepository: NoticeRepository,
-    private val noticeRepositorySupport: NoticeRepositorySupport,
     private  val favoriteRepository: FavoriteRepository
 ) : NoticeService {
-    @Transactional(readOnly = true)
-    override fun getNoticeCount(): Long {
-        return noticeRepository.count()
-    }
-
     @Transactional
     override fun createNotice(
         dto: NoticeCreateDto
@@ -81,15 +73,12 @@ class NoticeServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun findNotices(
-        queryParam: NoticeSearchQueryParameter,
-        pageable: Pageable
-    ): MultipleNoticeWrapperDto {
-        val page = noticeRepositorySupport.searchAll(queryParam, pageable)
+    override fun getNoticeList(): MultipleNoticeWrapperDto {
+        val noticeList = noticeRepository.findAll()
 
         return MultipleNoticeWrapperDto(
-            totalCount = page.totalElements.toInt(),
-            notices = page.content.map { NoticeDto.from(
+            totalCount = noticeList.size,
+            notices = noticeList.map { NoticeDto.from(
                 it,
                 createdBy = innerGetUser(it.createdBy!!),
                 updatedBy = innerGetUser(it.updatedBy!!)

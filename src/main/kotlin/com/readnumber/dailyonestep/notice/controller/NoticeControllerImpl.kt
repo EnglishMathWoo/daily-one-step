@@ -3,7 +3,6 @@ package com.readnumber.dailyonestep.notice.controller
 import com.readnumber.dailyonestep.common.binding_annotation.ValidUserIdFromAccessToken
 import com.readnumber.dailyonestep.notice.dto.request.NoticeCreateDto
 import com.readnumber.dailyonestep.notice.dto.request.NoticeModifyDto
-import com.readnumber.dailyonestep.notice.dto.request.NoticeSearchQueryParameter
 import com.readnumber.dailyonestep.notice.dto.response.NoticeWrapperDto
 import com.readnumber.dailyonestep.notice.dto.response.MultipleNoticeWrapperDto
 import com.readnumber.dailyonestep.notice.service.NoticeService
@@ -47,11 +46,8 @@ class NoticeControllerImpl(
 
 
     @GetMapping("/notices")
-    override fun searchNotices(
-        queryParameter: NoticeSearchQueryParameter,
-        pageable: Pageable
-    ): MultipleNoticeWrapperDto {
-        return noticeService.findNotices(queryParameter, pageable)
+    override fun getNoticeList(): MultipleNoticeWrapperDto {
+        return noticeService.getNoticeList()
     }
 
     @PatchMapping("/notices/{id}")

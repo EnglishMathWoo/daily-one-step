@@ -8,7 +8,6 @@ import com.readnumber.dailyonestep.user.User
 import com.readnumber.dailyonestep.user.UserRepository
 import com.readnumber.dailyonestep.user.UserToken
 import com.readnumber.dailyonestep.user.UserTokenRepository
-import com.readnumber.dailyonestep.user.dto.request.UserChangePasswordDto
 import com.readnumber.dailyonestep.user.dto.request.UserModifyDto
 import com.readnumber.dailyonestep.user.dto.request.UserSignInRequestDto
 import com.readnumber.dailyonestep.user.dto.request.UserSignUpDto
@@ -21,11 +20,11 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserServiceImpl(
-        private val passwordEncoder: PasswordEncoder,
-        private val accessTokenProvider: UserAccessTokenProvider,
-        private val refreshTokenProvider: UserRefreshTokenProvider,
-        private val userRepository: UserRepository,
-        private val tokenRepository: UserTokenRepository,
+    private val passwordEncoder: PasswordEncoder,
+    private val accessTokenProvider: UserAccessTokenProvider,
+    private val refreshTokenProvider: UserRefreshTokenProvider,
+    private val userRepository: UserRepository,
+    private val tokenRepository: UserTokenRepository,
 ) : UserService {
 
     @Transactional
@@ -39,16 +38,6 @@ class UserServiceImpl(
         userRepository.save(newUser)
 
         return UserDto.from(newUser)
-    }
-
-    @Transactional
-    override fun changePassword(id: Long, dto: UserChangePasswordDto): UserDto {
-        val user = getUserAndThrowExIfNotExisted(id)
-        if (!matchPassword(dto.currentPassword, user.encryptedPassword)) {
-            throw IncorrectPasswordException("비밀번호가 일치하지 않습니다.")
-        }
-        user.encryptedPassword = encryptPassword(dto.newPassword)
-        return UserDto.from(user)
     }
 
     @Transactional
@@ -85,11 +74,6 @@ class UserServiceImpl(
     override fun getOne(id: Long): UserDto {
         val user = getUserAndThrowExIfNotExisted(id)
         return UserDto.from(user)
-    }
-
-    @Transactional(readOnly = true)
-    override fun count(): Long {
-        return userRepository.count()
     }
 
     @Transactional
@@ -155,10 +139,6 @@ class UserServiceImpl(
         } catch (e: java.lang.Exception) {
             throw InternalServerException("토큰 삭제에 실패했습니다.")
         }
-    }
-
-    private fun matchPassword(rawPassword: String, encPassword: String): Boolean {
-        return passwordEncoder.matches(rawPassword, encPassword)
     }
 
     private fun encryptPassword(rawPassword: String): String {

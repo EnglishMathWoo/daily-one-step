@@ -46,17 +46,6 @@ class UserControllerImpl(
         return true
     }
 
-    @PutMapping("/passwords")
-    override fun changeUserPassword(
-        @ValidUserIdFromAccessToken
-        userId: Long,
-        @Valid @RequestBody
-        dto: UserChangePasswordDto
-    ): UserWrapperDto {
-        val user = userService.changePassword(userId, dto)
-        return UserWrapperDto.from(user)
-    }
-
     @GetMapping("/me")
     override fun getMe(
         @ValidUserIdFromAccessToken

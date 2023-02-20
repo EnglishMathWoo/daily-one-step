@@ -55,14 +55,6 @@ class FavoriteServiceImpl(
         )
     }
 
-    @Transactional(readOnly = true)
-    override fun getFavoriteStatus(
-        noticeId: Long,
-        userId: Long
-    ): Boolean? {
-        return innerCheckExistingFavorite(noticeId, userId)
-    }
-
     private fun innerGetUser(id: Long): User {
         return userRepository.findById(id)
             .orElseThrow { throw NotFoundResourceException("일치하는 유저를 찾을 수 없습니다.") }
