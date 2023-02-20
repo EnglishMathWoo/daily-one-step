@@ -2,6 +2,7 @@ package com.readnumber.dailyonestep.user.controller
 
 import com.readnumber.dailyonestep.common.binding_annotation.ValidJwtHeader
 import com.readnumber.dailyonestep.common.binding_annotation.ValidUserIdFromAccessToken
+import com.readnumber.dailyonestep.common.binding_annotation.ValidUserIdFromRefreshToken
 import com.readnumber.dailyonestep.user.dto.request.*
 import com.readnumber.dailyonestep.user.dto.response.UserWrapperDto
 import com.readnumber.dailyonestep.user.service.UserService
@@ -36,7 +37,7 @@ class UserControllerImpl(
 
     @DeleteMapping
     override fun deleteUser(
-        @ValidUserIdFromAccessToken
+        @ValidUserIdFromRefreshToken
         id: Long,
         @ValidJwtHeader
         refreshToken: String

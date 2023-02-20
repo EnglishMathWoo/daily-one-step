@@ -19,6 +19,7 @@ class UserAccessTokenFilter(
     private val antiMatchers = arrayOf(
         AntPathRequestMatcher("/users/access-tokens/refresh"),
         AntPathRequestMatcher("/users/sign-out"),
+        AntPathRequestMatcher("/users", "DELETE")
     )
 
     private fun getJwtFromHeader(request: HttpServletRequest): String? {
