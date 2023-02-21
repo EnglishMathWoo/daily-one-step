@@ -42,7 +42,8 @@ class NoticeServiceImpl(
         noticeId: Long,
         userId: Long
     ): NoticeDto {
-        val notice = innerGetNotice(noticeId)
+        val notice = innerGetNoticeWithComment(noticeId)
+
         val favorite = innerCheckExistingFavorite(noticeId, userId)
         val createdBy = innerGetUser(notice.createdBy!!)
         val updatedBy = innerGetUser(notice.updatedBy!!)
@@ -124,6 +125,11 @@ class NoticeServiceImpl(
     private fun innerGetNotice(id: Long): Notice {
         return noticeRepository.findById(id)
             .orElseThrow { throw NotFoundResourceException("일치하는 게시글을 찾을 수 없습니다.") }
+    }
+
+    private fun innerGetNoticeWithComment(id: Long): Notice {
+        return noticeRepository.findWithCommentsById(id)
+            ?: throw NotFoundResourceException("일치하는 게시글을 찾을 수 없습니다.")
     }
 
     private fun innerGetMyNotices(userId: Long): List<Notice>? {
