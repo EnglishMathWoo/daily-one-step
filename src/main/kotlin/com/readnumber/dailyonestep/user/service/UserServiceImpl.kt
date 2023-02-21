@@ -86,10 +86,10 @@ class UserServiceImpl(
         }
 
         val accessToken = accessTokenProvider.generateToken(
-            id = user.id!!, subject = TokenSubjectEnum.SIGN_IN
+            id = user.id!!, subject = TokenSubjectEnum.SIGN_IN, dto.username
         )
         val refreshToken = refreshTokenProvider.generateToken(
-            id = user.id!!, subject = TokenSubjectEnum.SIGN_IN
+            id = user.id!!, subject = TokenSubjectEnum.SIGN_IN, dto.username
         )
 
         if (tokenRepository.findByRefreshToken(refreshToken) != null) {
@@ -118,9 +118,12 @@ class UserServiceImpl(
             throw InvalidTokenException("유효한 액세스 토큰이 아닙니다.")
         }
 
+        val username = accessTokenProvider.getAuthenticationUsernameFromToken(userToken.accessToken)
+
         val newAccessToken = accessTokenProvider.generateToken(
             id = userId,
             subject = TokenSubjectEnum.REFRESH_ACCESS_TOKEN,
+            username
         )
 
         userToken.accessToken = newAccessToken

@@ -11,12 +11,8 @@ interface CommentService {
         noticeId: Long
     ): CommentDto
 
-    fun getComments(
-        noticeId: Long
-    ): MultipleCommentWrapperDto
-
     fun getMyComments(
-        userId: Long
+        username: String
     ): MultipleCommentWrapperDto
 
     fun modifyComment(

@@ -11,12 +11,8 @@ interface CommentController {
         noticeId: Long
     ): CommentWrapperDto
 
-    fun getComments(
-        id: Long
-    ): MultipleCommentWrapperDto
-
     fun getMyComments(
-        userId: Long
+        username: String
     ): MultipleCommentWrapperDto
 
     fun modifyComment(

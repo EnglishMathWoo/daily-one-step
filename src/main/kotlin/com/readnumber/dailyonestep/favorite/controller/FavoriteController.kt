@@ -5,10 +5,10 @@ import com.readnumber.dailyonestep.notice.dto.response.MultipleNoticeWrapperDto
 interface FavoriteController {
     fun createFavorite(
         noticeId: Long,
-        userId: Long
+        username: String
     ): Boolean?
 
     fun getMyFavoriteNotices(
-        userId: Long
+        username: String
     ): MultipleNoticeWrapperDto
 }

@@ -8,21 +8,19 @@ import java.util.*
 interface FavoriteRepository : JpaRepository<Favorite, Long> {
     @Query(value = "SELECT favorite " +
             "FROM Favorite favorite " +
-            "WHERE favorite.createdBy = :#{#userId} "
-    )
-    fun findAllByUserId(
-        @Param("userId")
-        userId: Long
+            "WHERE favorite.createdBy = :#{#username}")
+    fun findAllByUsername(
+        @Param("username")
+        username: String
     ): List<Favorite>?
 
     @Query(value = "SELECT favorite " +
             "FROM Favorite favorite " +
-            "WHERE favorite.notice.id = :#{#noticeId} AND favorite.createdBy = :#{#userId} "
-    )
-    fun findByNoticeIdAndUserId(
+            "WHERE favorite.notice.id = :#{#noticeId} AND favorite.createdBy = :#{#username}")
+    fun findByNoticeIdAndUsername(
         @Param("noticeId")
         noticeId: Long,
-        @Param("userId")
-        userId: Long
+        @Param("username")
+        username: String
     ): Favorite?
 }

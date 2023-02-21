@@ -16,15 +16,13 @@ data class NoticeDto(
     val comments: List<CommentDto>?,
     val createdAt: LocalDate?,
     val updatedAt: LocalDate?,
-    val createdBy: UserSimpleDto?,
-    val updatedBy: UserSimpleDto?,
+    val createdBy: String?,
+    val updatedBy: String?,
 ) {
     companion object {
         fun from(
             entity: Notice,
-            favorite: Boolean? = false,
-            createdBy: User? = null,
-            updatedBy: User? = null,
+            favorite: Boolean? = false
         ): NoticeDto {
             return NoticeDto(
                 id = entity.id ?: throw InternalServerException("entity는 id 값이 있어야 합니다."),
@@ -34,8 +32,8 @@ data class NoticeDto(
                 comments = entity.comments.map { CommentDto.from(it) },
                 createdAt = entity.createdAt,
                 updatedAt = entity.updatedAt,
-                createdBy = UserSimpleDto.from(createdBy),
-                updatedBy = UserSimpleDto.from(updatedBy)
+                createdBy = entity.createdBy,
+                updatedBy = entity.updatedBy
             )
         }
     }

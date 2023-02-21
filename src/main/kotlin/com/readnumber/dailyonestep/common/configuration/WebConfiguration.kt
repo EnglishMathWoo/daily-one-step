@@ -3,6 +3,7 @@ package com.readnumber.dailyonestep.common.configuration
 import com.readnumber.dailyonestep.common.binding_annotation.ValidUserIdFromAccessTokenArgumentResolver
 import com.readnumber.dailyonestep.common.binding_annotation.ValidUserIdFromRefreshTokenArgumentResolver
 import com.readnumber.dailyonestep.common.binding_annotation.ValidJwtHeaderArgumentResolver
+import com.readnumber.dailyonestep.common.binding_annotation.ValidUsernameFromAccessTokenFromArgumentResolver
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
@@ -12,7 +13,8 @@ class WebConfiguration(
     // A) Custom Resolver
         private val jwtHeaderResolver: ValidJwtHeaderArgumentResolver,
         private val userIdAccessResolver: ValidUserIdFromAccessTokenArgumentResolver,
-        private val userIdRefreshResolver: ValidUserIdFromRefreshTokenArgumentResolver
+        private val userIdRefreshResolver: ValidUserIdFromRefreshTokenArgumentResolver,
+        private val usernameResolver: ValidUsernameFromAccessTokenFromArgumentResolver
 ) : WebMvcConfigurer {
 
     override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver>) {
@@ -20,5 +22,6 @@ class WebConfiguration(
         resolvers.add(jwtHeaderResolver)
         resolvers.add(userIdAccessResolver)
         resolvers.add(userIdRefreshResolver)
+        resolvers.add(usernameResolver)
     }
 }

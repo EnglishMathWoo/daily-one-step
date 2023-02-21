@@ -20,7 +20,7 @@ class UserAccessTokenProvider : BaseTokenProvider() {
         return tokenExpiredSeconds.toLong()
     }
 
-    fun generateToken(id: Long, subject: TokenSubjectEnum): String {
+    fun generateToken(id: Long, subject: TokenSubjectEnum, username: String): String {
         return super.generateToken(
             issuer = issuer,
             secretKey = tokenSecretKey,
@@ -28,6 +28,7 @@ class UserAccessTokenProvider : BaseTokenProvider() {
             id = id,
             audience = USER_ACCESS_TOKEN.content,
             subject = subject.content,
+            username = username
         )
     }
 
@@ -41,6 +42,14 @@ class UserAccessTokenProvider : BaseTokenProvider() {
 
     fun getAuthenticationIdFromToken(token: String): Long {
         return super.getAuthenticationIdFromToken(
+            secretKey = tokenSecretKey,
+            token = token,
+            validAudience = USER_ACCESS_TOKEN.content
+        )
+    }
+
+    fun getAuthenticationUsernameFromToken(token: String): String {
+        return super.getAuthenticationUsernameFromToken(
             secretKey = tokenSecretKey,
             token = token,
             validAudience = USER_ACCESS_TOKEN.content

@@ -4,7 +4,6 @@ import com.readnumber.dailyonestep.notice.dto.request.NoticeCreateDto
 import com.readnumber.dailyonestep.notice.dto.request.NoticeModifyDto
 import com.readnumber.dailyonestep.notice.dto.response.NoticeWrapperDto
 import com.readnumber.dailyonestep.notice.dto.response.MultipleNoticeWrapperDto
-import org.springframework.data.domain.Pageable
 
 interface NoticeController {
     fun createNotice(
@@ -13,11 +12,11 @@ interface NoticeController {
 
     fun getNotice(
         noticeId: Long,
-        userId: Long
+        username: String,
     ): NoticeWrapperDto
 
     fun getMyNotices(
-        userId: Long
+        username: String
     ): MultipleNoticeWrapperDto
 
     fun getNoticeList(): MultipleNoticeWrapperDto

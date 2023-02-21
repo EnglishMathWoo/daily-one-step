@@ -7,14 +7,11 @@ import com.readnumber.dailyonestep.notice.NoticeRepository
 import com.readnumber.dailyonestep.notice.Notice
 import com.readnumber.dailyonestep.notice.dto.response.MultipleNoticeWrapperDto
 import com.readnumber.dailyonestep.notice.dto.response.NoticeDto
-import com.readnumber.dailyonestep.user.User
-import com.readnumber.dailyonestep.user.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class FavoriteServiceImpl(
-    private val userRepository: UserRepository,
     private val noticeRepository: NoticeRepository,
     private val favoriteRepository: FavoriteRepository
 ) : FavoriteService {
@@ -26,9 +23,9 @@ class FavoriteServiceImpl(
     @Transactional
     override fun createFavorite(
         noticeId: Long,
-        userId: Long
+        username: String
     ): Boolean? {
-        if(innerCheckExistingFavorite(noticeId, userId)) {
+        if(innerCheckExistingFavorite(noticeId, username)) {
             val notice = innerGetNotice(noticeId)
             val favoriteEntity = Favorite(notice)
             favoriteRepository.save(favoriteEntity)
@@ -40,24 +37,14 @@ class FavoriteServiceImpl(
 
     @Transactional(readOnly = true)
     override fun getMyFavoriteNotices(
-        userId: Long
+        username: String
     ): MultipleNoticeWrapperDto {
-        val favorite = innerGetMyFavorites(userId)
+        val favorite = innerGetMyFavorites(username)
 
         return MultipleNoticeWrapperDto(
             totalCount = favorite?.size ?: 0,
-            notices = favorite?.map { NoticeDto.from(
-                it.notice!!,
-                createdBy = innerGetUser(it.notice!!.createdBy!!),
-                updatedBy = innerGetUser(it.notice!!.updatedBy!!)
-            )
-            }
+            notices = favorite?.map { NoticeDto.from( it.notice!!) }
         )
-    }
-
-    private fun innerGetUser(id: Long): User {
-        return userRepository.findById(id)
-            .orElseThrow { throw NotFoundResourceException("일치하는 유저를 찾을 수 없습니다.") }
     }
 
     private fun innerGetNotice(noticeId: Long): Notice {
@@ -65,12 +52,12 @@ class FavoriteServiceImpl(
             .orElseThrow { throw NotFoundResourceException("일치하는 게시글을 찾을 수 없습니다.") }
     }
 
-    private fun innerGetMyFavorites(userId: Long): List<Favorite>? {
-        return favoriteRepository.findAllByUserId(userId)
+    private fun innerGetMyFavorites(username: String): List<Favorite>? {
+        return favoriteRepository.findAllByUsername(username)
     }
 
-    private fun innerCheckExistingFavorite(noticeId: Long, userId: Long): Boolean {
-        val favorite = favoriteRepository.findByNoticeIdAndUserId(noticeId, userId)
+    private fun innerCheckExistingFavorite(noticeId: Long, username: String): Boolean {
+        val favorite = favoriteRepository.findByNoticeIdAndUsername(noticeId, username)
 
         if(favorite != null) {
             favoriteRepository.deleteById(favorite.id!!)

@@ -11,8 +11,8 @@ data class CommentDto(
     val content: String,
     val createdAt: LocalDate?,
     val updatedAt: LocalDate?,
-    val createdBy: UserSimpleDto?,
-    val updatedBy: UserSimpleDto?,
+    val createdBy: String?,
+    val updatedBy: String?,
 ) {
     companion object {
         fun from(
@@ -25,8 +25,8 @@ data class CommentDto(
                 content = entity.content,
                 createdAt = entity.createdAt,
                 updatedAt = entity.updatedAt,
-                createdBy = UserSimpleDto.from(createdBy),
-                updatedBy = UserSimpleDto.from(updatedBy)
+                createdBy = entity.createdBy,
+                updatedBy = entity.updatedBy
             )
         }
     }

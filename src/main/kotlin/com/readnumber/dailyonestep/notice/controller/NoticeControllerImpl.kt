@@ -1,13 +1,12 @@
 package com.readnumber.dailyonestep.notice.controller
 
-import com.readnumber.dailyonestep.common.binding_annotation.ValidUserIdFromAccessToken
+import com.readnumber.dailyonestep.common.binding_annotation.ValidUsernameFromAccessToken
 import com.readnumber.dailyonestep.notice.dto.request.NoticeCreateDto
 import com.readnumber.dailyonestep.notice.dto.request.NoticeModifyDto
 import com.readnumber.dailyonestep.notice.dto.response.NoticeWrapperDto
 import com.readnumber.dailyonestep.notice.dto.response.MultipleNoticeWrapperDto
 import com.readnumber.dailyonestep.notice.service.NoticeService
 import jakarta.validation.Valid
-import org.springframework.data.domain.Pageable
 import org.springframework.web.bind.annotation.*
 
 @RequestMapping
@@ -30,18 +29,18 @@ class NoticeControllerImpl(
     override fun getNotice(
         @PathVariable(value = "id")
         noticeId: Long,
-        @ValidUserIdFromAccessToken
-        userId: Long
+        @ValidUsernameFromAccessToken
+        username: String
     ): NoticeWrapperDto {
-        return NoticeWrapperDto.from(noticeService.getNotice(noticeId, userId))
+        return NoticeWrapperDto.from(noticeService.getNotice(noticeId, username))
     }
 
     @GetMapping("/notices/me")
     override fun getMyNotices(
-        @ValidUserIdFromAccessToken
-        userId: Long,
+        @ValidUsernameFromAccessToken
+        username: String
     ): MultipleNoticeWrapperDto {
-        return noticeService.getMyNotices(userId)
+        return noticeService.getMyNotices(username)
     }
 
 

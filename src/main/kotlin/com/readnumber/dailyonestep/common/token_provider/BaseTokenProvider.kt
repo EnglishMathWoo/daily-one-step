@@ -23,6 +23,7 @@ abstract class BaseTokenProvider {
         id: Long,
         audience: String,
         subject: String,
+        username: String
     ): String {
         try {
             val now = Date()
@@ -37,6 +38,8 @@ abstract class BaseTokenProvider {
                 .setIssuedAt(now)
                 .setIssuer(issuer)
                 .setAudience(audience)
+
+            claims["username"] = username
 
             return Jwts.builder()
                 .setClaims(claims)
@@ -60,6 +63,12 @@ abstract class BaseTokenProvider {
             throw InvalidTokenException("토큰 id 정보가 올바르지 않습니다.(not long type)")
         }
 
+        val username = try {
+            claimBody["username"].toString()
+        } catch (e: Exception) {
+            throw InvalidTokenException("토큰 유저네임 정보가 올바르지 않습니다.")
+        }
+
         if (tokenId < 1) {
             throw InvalidTokenException("토큰 id 정보가 올바르지 않습니다.")
         }
@@ -70,7 +79,7 @@ abstract class BaseTokenProvider {
 
         val principal = UserPrincipal(
             userId = tokenId,
-            userName = "user:$tokenId"
+            userName = username
         )
 
         return UsernamePasswordAuthenticationToken(
@@ -88,6 +97,17 @@ abstract class BaseTokenProvider {
         val principal = authentication.principal as Principal
 
         return principal.getId()
+    }
+
+    protected fun getAuthenticationUsernameFromToken(
+        secretKey: String,
+        token: String,
+        validAudience: String
+    ): String {
+        val authentication = getAuthenticationFromToken(secretKey, token, validAudience)
+        val principal = authentication.principal as Principal
+
+        return principal.getUsername()
     }
 
     private fun innerGetClaimBodyFromJwt(

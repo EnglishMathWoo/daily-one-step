@@ -8,11 +8,11 @@ import java.util.*
 interface CommentRepository : JpaRepository<Comment, Long> {
     @Query(value = "SELECT comment " +
         "FROM Comment comment " +
-        "WHERE comment.createdBy = :#{#userId} "
+        "WHERE comment.createdBy = :#{#username} "
     )
-    fun findAllByUserId(
-        @Param("userId")
-        userId: Long
+    fun findAllByUsername(
+        @Param("username")
+        username: String
     ): List<Comment>?
 
     @Query(value = "SELECT comment " +

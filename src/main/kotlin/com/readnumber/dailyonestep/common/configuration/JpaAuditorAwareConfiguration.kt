@@ -10,8 +10,8 @@ import java.util.*
 @EnableJpaAuditing
 class JpaAuditorAwareConfiguration(
     private val authenticationFacade: AuthenticationFacade
-) : AuditorAware<Long> {
-    override fun getCurrentAuditor(): Optional<Long> {
-        return Optional.ofNullable(authenticationFacade.getPrincipal().getId())
+) : AuditorAware<String> {
+    override fun getCurrentAuditor(): Optional<String> {
+        return Optional.ofNullable(authenticationFacade.getPrincipal().getUsername())
     }
 }

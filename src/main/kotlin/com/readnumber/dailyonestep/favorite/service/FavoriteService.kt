@@ -7,10 +7,10 @@ interface FavoriteService {
 
     fun createFavorite(
         noticeId: Long,
-        userId: Long
+        username: String
     ): Boolean?
 
     fun getMyFavoriteNotices(
-        userId: Long
+        username: String
     ): MultipleNoticeWrapperDto
 }

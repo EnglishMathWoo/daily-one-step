@@ -9,15 +9,12 @@ import com.readnumber.dailyonestep.notice.dto.response.NoticeDto
 import com.readnumber.dailyonestep.notice.dto.request.NoticeCreateDto
 import com.readnumber.dailyonestep.notice.dto.request.NoticeModifyDto
 import com.readnumber.dailyonestep.notice.dto.response.MultipleNoticeWrapperDto
-import com.readnumber.dailyonestep.user.User
-import com.readnumber.dailyonestep.user.UserRepository
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class NoticeServiceImpl(
-    private val userRepository: UserRepository,
     private val noticeRepository: NoticeRepository,
     private  val favoriteRepository: FavoriteRepository
 ) : NoticeService {
@@ -28,46 +25,30 @@ class NoticeServiceImpl(
         val notice = noticeRepository.save(
             dto.toEntity()
         )
-        val createdBy = innerGetUser(notice.createdBy!!)
 
-        return NoticeDto.from(
-            notice,
-            createdBy = createdBy
-        )
+        return NoticeDto.from(notice)
     }
 
     @Transactional(readOnly = true)
     override fun getNotice(
         noticeId: Long,
-        userId: Long
+        username: String
     ): NoticeDto {
         val notice = innerGetNoticeWithComment(noticeId)
-        val favorite = innerCheckExistingFavorite(noticeId, userId)
-        val createdBy = innerGetUser(notice.createdBy!!)
-        val updatedBy = innerGetUser(notice.updatedBy!!)
+        val favorite = innerCheckExistingFavorite(noticeId, username)
 
-        return NoticeDto.from(
-            notice,
-            favorite = favorite,
-            createdBy = createdBy,
-            updatedBy = updatedBy
-        )
+        return NoticeDto.from(notice, favorite)
     }
 
     @Transactional(readOnly = true)
     override fun getMyNotices(
-        userId: Long
+        username: String
     ): MultipleNoticeWrapperDto {
-        val notices = innerGetMyNotices(userId)
+        val notices = innerGetMyNotices(username)
 
         return MultipleNoticeWrapperDto(
             totalCount = notices?.size ?: 0,
-            notices = notices?.map { NoticeDto.from(
-                it,
-                createdBy = innerGetUser(it.createdBy!!),
-                updatedBy = innerGetUser(it.updatedBy!!)
-            )
-            }
+            notices = notices?.map { NoticeDto.from(it) }
         )
     }
 
@@ -77,12 +58,7 @@ class NoticeServiceImpl(
 
         return MultipleNoticeWrapperDto(
             totalCount = noticeList.size,
-            notices = noticeList.map { NoticeDto.from(
-                it,
-                createdBy = innerGetUser(it.createdBy!!),
-                updatedBy = innerGetUser(it.updatedBy!!)
-            )
-            }
+            notices = noticeList.map { NoticeDto.from(it) }
         )
     }
 
@@ -92,14 +68,8 @@ class NoticeServiceImpl(
         dto: NoticeModifyDto
     ): NoticeDto {
         val modifiedNotice = dto.modifyEntity(innerGetNotice(id))
-        val createdBy = innerGetUser(modifiedNotice.createdBy!!)
-        val updatedBy = innerGetUser(modifiedNotice.updatedBy!!)
 
-        return NoticeDto.from(
-            modifiedNotice,
-            createdBy = createdBy,
-            updatedBy = updatedBy
-        )
+        return NoticeDto.from(modifiedNotice)
     }
 
     @Transactional
@@ -115,10 +85,6 @@ class NoticeServiceImpl(
         }
     }
 
-    private fun innerGetUser(id: Long): User {
-        return userRepository.findById(id)
-            .orElseThrow { throw NotFoundResourceException("일치하는 유저를 찾을 수 없습니다.") }
-    }
 
     private fun innerGetNotice(id: Long): Notice {
         return noticeRepository.findById(id)
@@ -130,12 +96,12 @@ class NoticeServiceImpl(
             ?: throw NotFoundResourceException("일치하는 게시글을 찾을 수 없습니다.")
     }
 
-    private fun innerGetMyNotices(userId: Long): List<Notice>? {
-        return noticeRepository.findAllByUserId(userId)
+    private fun innerGetMyNotices(username: String): List<Notice>? {
+        return noticeRepository.findAllByUserId(username)
     }
 
-    private fun innerCheckExistingFavorite(noticeId: Long, userId: Long): Boolean {
-        val favorite = favoriteRepository.findByNoticeIdAndUserId(noticeId, userId)
+    private fun innerCheckExistingFavorite(noticeId: Long, username: String): Boolean {
+        val favorite = favoriteRepository.findByNoticeIdAndUsername(noticeId, username)
         if(favorite != null) return true
 
         return false

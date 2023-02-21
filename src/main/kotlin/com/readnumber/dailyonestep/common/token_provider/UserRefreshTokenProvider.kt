@@ -20,7 +20,7 @@ class UserRefreshTokenProvider : BaseTokenProvider() {
         return tokenExpiredSeconds.toLong()
     }
 
-    fun generateToken(id: Long, subject: TokenSubjectEnum): String {
+    fun generateToken(id: Long, subject: TokenSubjectEnum, username: String): String {
         return super.generateToken(
             issuer = issuer,
             secretKey = tokenSecretKey,
@@ -28,6 +28,7 @@ class UserRefreshTokenProvider : BaseTokenProvider() {
             id = id,
             audience = USER_REFRESH_TOKEN.content,
             subject = subject.content,
+            username = username
         )
     }
 

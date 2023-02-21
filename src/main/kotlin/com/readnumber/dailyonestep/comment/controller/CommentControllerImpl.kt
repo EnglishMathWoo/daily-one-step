@@ -5,7 +5,7 @@ import com.readnumber.dailyonestep.comment.dto.request.CommentModifyDto
 import com.readnumber.dailyonestep.comment.dto.response.CommentWrapperDto
 import com.readnumber.dailyonestep.comment.dto.response.MultipleCommentWrapperDto
 import com.readnumber.dailyonestep.comment.service.CommentService
-import com.readnumber.dailyonestep.common.binding_annotation.ValidUserIdFromAccessToken
+import com.readnumber.dailyonestep.common.binding_annotation.ValidUsernameFromAccessToken
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 
@@ -27,20 +27,12 @@ class CommentControllerImpl(
         )
     }
 
-    @GetMapping("/notices/{noticeId}/comments")
-    override fun getComments(
-        @PathVariable(value = "noticeId")
-        noticeId: Long
-    ): MultipleCommentWrapperDto {
-        return commentService.getComments(noticeId)
-    }
-
     @GetMapping("/comments/me")
     override fun getMyComments(
-        @ValidUserIdFromAccessToken
-        userId: Long,
+        @ValidUsernameFromAccessToken
+        username: String,
     ): MultipleCommentWrapperDto{
-        return commentService.getMyComments(userId)
+        return commentService.getMyComments(username)
     }
 
     @PatchMapping("/comments/{id}")

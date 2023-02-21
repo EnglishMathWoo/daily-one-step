@@ -19,7 +19,7 @@ abstract class BaseEntity(
 
     @Column
     @CreatedBy
-    var createdBy: Long? = null,
+    var createdBy: String? = null,
 
     @Column
     @CreatedDate
@@ -27,7 +27,7 @@ abstract class BaseEntity(
 
     @Column
     @LastModifiedBy
-    var updatedBy: Long? = null,
+    var updatedBy: String? = null,
 
     @Column
     @LastModifiedDate
