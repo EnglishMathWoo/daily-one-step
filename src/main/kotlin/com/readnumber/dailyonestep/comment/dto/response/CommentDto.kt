@@ -3,7 +3,6 @@ package com.readnumber.dailyonestep.comment.dto.response
 import com.readnumber.dailyonestep.comment.Comment
 import com.readnumber.dailyonestep.common.error.exception.InternalServerException
 import com.readnumber.dailyonestep.user.User
-import com.readnumber.dailyonestep.user.dto.response.UserSimpleDto
 import java.time.LocalDate
 
 data class CommentDto(
@@ -16,9 +15,7 @@ data class CommentDto(
 ) {
     companion object {
         fun from(
-            entity: Comment?,
-            createdBy: User? = null,
-            updatedBy: User? = null,
+            entity: Comment?
         ): CommentDto {
             return CommentDto(
                 id = entity?.id ?: throw InternalServerException("entity는 id 값이 있어야 합니다."),

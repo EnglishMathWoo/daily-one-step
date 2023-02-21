@@ -3,10 +3,7 @@ package com.readnumber.dailyonestep.notice.dto.response
 import com.readnumber.dailyonestep.comment.dto.response.CommentDto
 import com.readnumber.dailyonestep.common.error.exception.InternalServerException
 import com.readnumber.dailyonestep.notice.Notice
-import com.readnumber.dailyonestep.user.User
-import com.readnumber.dailyonestep.user.dto.response.UserSimpleDto
 import java.time.LocalDate
-import javax.xml.stream.events.Comment
 
 data class NoticeDto(
     val id: Long,
