@@ -18,22 +18,4 @@ interface NoticeRepository : JpaRepository<Notice, Long> {
 
     @EntityGraph(attributePaths = ["comments"])
     fun findWithCommentsById(id: Long): Notice?
-
-//    @Query(value = "SELECT notice " +
-//            "FROM Notice notice " +
-//            "INNER JOIN User user on notice.createdBy = user.id " +
-//            "WHERE notice.id = :#{#id}")
-//    override fun findById(
-//        @Param("id")
-//        id: Long
-//    ): Optional<Notice>
-//
-//    @Query(value = "SELECT notice " +
-//            "FROM Notice notice " +
-//            "INNER JOIN User user on notice.createdBy = user.id " +
-//            "WHERE notice.id = :#{#id}")
-//    override fun findAll(
-//            @Param("id")
-//            id: Long
-//    ): Optional<Notice>
 }

@@ -12,7 +12,6 @@ import com.readnumber.dailyonestep.notice.dto.response.MultipleNoticeWrapperDto
 import com.readnumber.dailyonestep.user.User
 import com.readnumber.dailyonestep.user.UserRepository
 import org.springframework.dao.EmptyResultDataAccessException
-import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -43,7 +42,6 @@ class NoticeServiceImpl(
         userId: Long
     ): NoticeDto {
         val notice = innerGetNoticeWithComment(noticeId)
-
         val favorite = innerCheckExistingFavorite(noticeId, userId)
         val createdBy = innerGetUser(notice.createdBy!!)
         val updatedBy = innerGetUser(notice.updatedBy!!)
