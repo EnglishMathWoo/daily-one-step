@@ -77,10 +77,6 @@ class CommentServiceImpl(
             .orElseThrow { throw NotFoundResourceException("일치하는 댓글을 찾을 수 없습니다.") }
     }
 
-    private fun innerGetCommentByNoticeId(noticeId: Long): List<Comment>? {
-        return commentRepository.findAllByNoticeId(noticeId)
-    }
-
     private fun innerGetMyComments(username: String): List<Comment>? {
         return commentRepository.findAllByUsername(username)
     }
